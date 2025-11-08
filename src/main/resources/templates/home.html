@@ -1,0 +1,40 @@
+<header>
+    <h1>Добро пожаловать в CShop!</h1>
+
+    <div th:if="${!isAuthenticated}">
+        <a th:href="@{/auth/login}">Войти</a> |
+        <a th:href="@{/auth/register}">Регистрация</a>
+    </div>
+
+    <div th:if="${isAuthenticated}">
+        <form th:action="@{/auth/logout}" method="post">
+            <button type="submit">Выйти</button>
+        </form>
+
+        <div th:if="${isAdmin}">
+            <a th:href="@{/products/create}">Создать продукт</a> |
+            <a th:href="@{/categories/create}">Создать категорию</a>
+        </div>
+    </div>
+</header>
+
+<section>
+    <h2>Категории</h2>
+    <ul>
+        <li th:each="cat : ${categories}" th:text="${cat.name}"></li>
+    </ul>
+
+    <h2>Товары</h2>
+    <div th:each="p : ${products}">
+        <p>
+            <strong th:text="${p.name}"></strong> —
+            <span th:text="${p.price} + ' €'"></span>
+
+            <span th:if="${isAuthenticated}">
+                <form th:action="@{/orders/create}" method="get" style="display:inline;">
+                    <button type="submit">Сделать заказ</button>
+                </form>
+            </span>
+        </p>
+    </div>
+</section>

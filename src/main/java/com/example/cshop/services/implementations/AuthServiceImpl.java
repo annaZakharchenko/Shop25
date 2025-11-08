@@ -49,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public User login(UserLoginDto dto) {
-        User user = userRepository.findByUsername(dto.getUsername())
+        User user = userRepository.findByEmail(dto.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {

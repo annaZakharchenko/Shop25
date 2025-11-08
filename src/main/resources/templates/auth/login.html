@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Coffee Shop</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<div class="container">
+    <div class="login-card">
+        <h2>Welcome Back ☕</h2>
+        <p>Please log in to continue</p>
+
+        <form th:action="@{/auth/login}" th:object="${user}" method="post">
+            <div>
+                <label>Email</label>
+                <input type="email" th:field="*{email}" placeholder="you@example.com" required>
+            </div>
+
+            <div>
+                <label>Password</label>
+                <input type="password" th:field="*{password}" placeholder="••••••••" required>
+            </div>
+
+            <div th:if="${error}" class="error-message" th:text="${error}"></div>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <p>Don’t have an account? <a th:href="@{/auth/register}">Register</a></p>
+    </div>
+</div>
+</body>
+</html>

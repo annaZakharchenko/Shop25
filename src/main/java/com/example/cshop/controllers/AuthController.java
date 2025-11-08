@@ -77,6 +77,6 @@ public class AuthController {
     @PostMapping("/logout")
     public String logoutUser() {
         authService.logout(); // очищаем сессию
-        return "redirect:/auth/login?logout";
+        return "redirect:/auth/login.html?logout";
     }
 }
