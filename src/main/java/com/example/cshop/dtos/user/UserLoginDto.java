@@ -1,14 +1,13 @@
 package com.example.cshop.dtos.user;
 
-
 import jakarta.validation.constraints.NotBlank;
 
 public class UserLoginDto {
 
-    @NotBlank
+    @NotBlank(message = "Username is required")
     private String username;
 
-    @NotBlank
+    @NotBlank(message = "Password is required")
     private String password;
 
     public String getUsername() {
