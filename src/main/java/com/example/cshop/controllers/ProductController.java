@@ -28,7 +28,11 @@ public class ProductController {
         model.addAttribute("products", productService.findAll());
         return "product/list";
     }
-
+    @GetMapping("/detail/{id}")
+    public String productDetail(@PathVariable Long id, Model model) {
+        model.addAttribute("product", productService.findById(id));
+        return "product/detail";
+    }
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("product", new ProductCreateDto());

@@ -4,6 +4,7 @@ import com.example.cshop.dtos.product.ProductCreateDto;
 import com.example.cshop.dtos.product.ProductDto;
 import com.example.cshop.dtos.product.ProductUpdateDto;
 import com.example.cshop.mappers.ProductMapper;
+import com.example.cshop.models.Category;
 import com.example.cshop.models.Product;
 import com.example.cshop.repositories.ProductRepository;
 import com.example.cshop.services.interfaces.ProductService;
@@ -56,4 +57,5 @@ public class ProductServiceImpl implements ProductService {
     public void delete(Long id) {
         productRepository.deleteById(id);
     }
+
 }

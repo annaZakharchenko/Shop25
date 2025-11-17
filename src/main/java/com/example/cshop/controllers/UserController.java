@@ -20,11 +20,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
-    public String listUsers(Model model) {
-        model.addAttribute("users", userService.findAll());
-        return "user/list";
-    }
 
     @GetMapping("/create")
     public String showCreateForm(Model model) {
@@ -61,12 +56,6 @@ public class UserController {
             return "user/edit";
         }
         userService.update(id, dto);
-        return "redirect:/users";
-    }
-
-    @PostMapping("/delete/{id}")
-    public String deleteUser(@PathVariable Long id) {
-        userService.delete(id);
         return "redirect:/users";
     }
 }

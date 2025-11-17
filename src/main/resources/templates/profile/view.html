@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile - Coffee Shop</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; }
+
+        .navbar {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar h1 { font-size: 1.5rem; }
+        .navbar a { color: white; text-decoration: none; margin: 0 1rem; }
+
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+
+        .profile-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .profile-card h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+
+        .profile-info {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .profile-info .label {
+            font-weight: bold;
+            color: #666;
+        }
+
+        .orders-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .orders-section h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        .order-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-id {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .order-status {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .status-NEW { background: #3498db; color: white; }
+        .status-PROCESSING { background: #f39c12; color: white; }
+        .status-SHIPPED { background: #9b59b6; color: white; }
+        .status-DELIVERED { background: #27ae60; color: white; }
+        .status-CANCELLED { background: #e74c3c; color: white; }
+
+        .order-details {
+            color: #666;
+        }
+
+        .order-total {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-top: 1rem;
+        }
+
+        .no-orders {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <h1>☕ Coffee Shop</h1>
+    <div>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/products}">Products</a>
+        <a th:href="@{/cart}">Cart</a>
+        <a th:href="@{/profile}">Profile</a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="profile-card">
+        <h1>👤 My Profile</h1>
+        <div class="profile-info">
+            <div class="label">Username:</div>
+            <div th:text="${user.username}">Username</div>
+
+            <div class="label">Email:</div>
+            <div th:text="${user.email}">email@example.com</div>
+
+            <div class="label">Account Status:</div>
+            <div th:text="${user.enabled ? 'Active' : 'Inactive'}">Active</div>
+
+            <div class="label">Roles:</div>
+            <div>
+                    <span th:each="role : ${user.roles}"
+                          th:text="${role}"
+                          style="background: #ecf0f1; padding: 0.25rem 0.5rem; border-radius: 3px; margin-right: 0.5rem;"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="orders-section">
+        <h2>📦 My Orders</h2>
+
+        <div th:if="${orders.isEmpty()}" class="no-orders">
+            <p>You haven't placed any orders yet.</p>
+            <a th:href="@{/products}" style="color: #3498db;">Start shopping!</a>
+        </div>
+
+        <div th:unless="${orders.isEmpty()}">
+            <div th:each="order : ${orders}" class="order-card">
+                <div class="order-header">
+                    <div>
+                        <div class="order-id" th:text="${'Order #' + order.id}">Order #1</div>
+                        <div class="order-details" th:text="${'Date: ' + #temporals.format(order.orderDate, 'dd MMM yyyy HH:mm')}">Date</div>
+                    </div>
+                    <div>
+                            <span class="order-status"
+                                  th:classappend="${'status-' + order.status}"
+                                  th:text="${order.status}">Status</span>
+                    </div>
+                </div>
+
+                <div class="order-items">
+                    <div th:each="item : ${order.items}" style="margin-bottom: 0.5rem;">
+                        <span th:text="${item.productName}">Product</span>
+                        × <span th:text="${item.quantity}">1</span>
+                        - $<span th:text="${item.unitPrice * item.quantity}">0.00</span>
+                    </div>
+                </div>
+
+                <div class="order-total" th:text="${'Total: $' + order.total}">Total: $0.00</div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

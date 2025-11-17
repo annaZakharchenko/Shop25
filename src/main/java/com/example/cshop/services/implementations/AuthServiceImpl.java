@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -40,8 +41,20 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(dto.getEmail());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-        // правильно назначаем роль из enum
-        user.setRoles(Set.of(Role.ROLE_USER));
+        Set<Role> roles = new HashSet<>();
+
+        // Если email заканчивается на @cshop.com - это админ
+        if (dto.getEmail().toLowerCase().endsWith("@cshop.com")) {
+            roles.add(Role.ROLE_ADMIN);
+            roles.add(Role.ROLE_USER);
+            System.out.println("✅ Admin role assigned to: " + dto.getEmail());
+        } else {
+            // Обычный пользователь
+            roles.add(Role.ROLE_USER);
+        }
+
+        user.setRoles(roles);
+        user.setEnabled(true);
 
         return userRepository.save(user);
     }

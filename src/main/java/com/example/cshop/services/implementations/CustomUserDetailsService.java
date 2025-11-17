@@ -22,10 +22,16 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
+        String[] roles = user.getRoles()
+                .stream()
+                .map(role -> role.name().replace("ROLE_", "")) // USER, ADMIN
+                .toArray(String[]::new);
+
         return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getEmail()) // email как username
+                .username(user.getEmail())
                 .password(user.getPassword())
-                .authorities(user.getRoles().stream().map(Enum::name).toArray(String[]::new))
+                .roles(roles) // ВАЖНО
+                .disabled(!user.isEnabled())
                 .build();
     }
 }

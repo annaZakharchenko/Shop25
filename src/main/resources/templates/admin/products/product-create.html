@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Category - Admin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; }
+
+        .navbar {
+            background: #e74c3c;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar h1 { font-size: 1.5rem; }
+        .navbar a { color: white; text-decoration: none; margin: 0 1rem; }
+
+        .container { max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+
+        .form-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .form-card h1 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #229954;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <h1>🔧 Admin - Create Category</h1>
+    <div>
+        <a th:href="@{/templates/admin}">Dashboard</a>
+        <a th:href="@{/templates/user}">Categories</a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="form-card">
+        <h1>➕ Create New Category</h1>
+
+        <form th:action="@{/admin/categories/create}" th:object="${category}" method="post">
+            <div class="form-group">
+                <label for="name">Category Name *</label>
+                <input type="text"
+                       id="name"
+                       th:field="*{name}"
+                       placeholder="e.g., Espresso, Cappuccino, etc."
+                       required>
+                <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description"
+                          th:field="*{description}"
+                          placeholder="Describe this category..."></textarea>
+                <div class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">Create Category</button>
+                <a th:href="@{/templates/admin}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -25,15 +25,35 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/home", "/auth/**", "/css/**", "/js/**", "/images/**", "/products/**", "/categories/**")
-                        .permitAll()
+                        // Публичные страницы
+                        .requestMatchers("/", "/home", "/auth/**", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/products", "/products/detail/**", "/products/by-category/**").permitAll()
+                        .requestMatchers("/categories").permitAll()
+
+                        // Админские страницы
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                        // Для аутентифицированных пользователей
+                        .requestMatchers("/cart/**", "/profile/**", "/orders/my-orders").authenticated()
+
+                        // Все остальное требует аутентификации
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/auth/login")
-                        .usernameParameter("email") // поле email из формы
+                        .usernameParameter("email")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/home", true)
+                        .successHandler((req, res, authentication) -> {
+                            // перенаправление по ролям
+                            var auths = authentication.getAuthorities();
+                            boolean isAdmin = auths.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+                            if (isAdmin) {
+                                res.sendRedirect("/admin/dashboard");
+                            } else {
+                                res.sendRedirect("/home");
+                            }
+                        })
                         .permitAll()
                 )
                 .logout(logout -> logout
