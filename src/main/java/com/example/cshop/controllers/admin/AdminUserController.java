@@ -22,7 +22,7 @@ public class AdminUserController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping("/read")
+    @GetMapping("/")
     public String listUsers(Model model) {
         List<User> users = userRepository.findAll();
         model.addAttribute("users", users);

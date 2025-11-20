@@ -21,7 +21,7 @@ public class AdminCategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/read")
+    @GetMapping("/")
     public String listCategories(Model model) {
         model.addAttribute("categories", categoryService.findAll());
         return "admin/categories/categories-list";

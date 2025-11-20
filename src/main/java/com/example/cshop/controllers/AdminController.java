@@ -43,28 +43,6 @@ public class AdminController {
         return "admin/dashboard";
     }
 
-
-
-    // === PRODUCT MANAGEMENT ===
-    @GetMapping("/products/create")
-    public String showCreateProductForm(Model model) {
-        model.addAttribute("product", new ProductCreateDto());
-        model.addAttribute("categories", categoryService.findAll());
-        return "admin/product-create";
-    }
-
-    @PostMapping("/products/create")
-    public String createProduct(@ModelAttribute("product") @Valid ProductCreateDto dto,
-                                BindingResult bindingResult,
-                                Model model) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("categories", categoryService.findAll());
-            return "admin/product-create";
-        }
-        productService.create(dto);
-        return "redirect:/admin";
-    }
-
     // === ORDER MANAGEMENT ===
     @GetMapping("/orders")
     public String listOrders(Model model) {
