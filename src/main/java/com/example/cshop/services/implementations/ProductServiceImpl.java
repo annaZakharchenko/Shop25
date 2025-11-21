@@ -7,9 +7,11 @@ import com.example.cshop.mappers.ProductMapper;
 import com.example.cshop.models.Category;
 import com.example.cshop.models.Product;
 import com.example.cshop.repositories.ProductRepository;
+import com.example.cshop.repositories.CategoryRepository; // <- добавляем
 import com.example.cshop.services.interfaces.ProductService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,10 +20,14 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository; // <- добавляем
     private final ProductMapper productMapper;
 
-    public ProductServiceImpl(ProductRepository productRepository, ProductMapper productMapper) {
+    public ProductServiceImpl(ProductRepository productRepository,
+                              CategoryRepository categoryRepository,
+                              ProductMapper productMapper) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
         this.productMapper = productMapper;
     }
 
@@ -42,6 +48,12 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto create(ProductCreateDto dto) {
         Product product = productMapper.toEntity(dto);
+
+        // Получаем категорию из базы
+        Category category = categoryRepository.findById(dto.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+        product.setCategory(category);
+
         return productMapper.toDto(productRepository.save(product));
     }
 
@@ -49,7 +61,14 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto update(Long id, ProductUpdateDto dto) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
+
         productMapper.updateEntity(dto, product);
+
+        // Обновляем категорию, если нужно
+        Category category = categoryRepository.findById(dto.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+        product.setCategory(category);
+
         return productMapper.toDto(productRepository.save(product));
     }
 
@@ -57,5 +76,4 @@ public class ProductServiceImpl implements ProductService {
     public void delete(Long id) {
         productRepository.deleteById(id);
     }
-
 }

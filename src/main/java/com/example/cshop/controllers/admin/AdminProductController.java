@@ -24,30 +24,32 @@ public class AdminProductController {
         this.productService = productService;
         this.categoryService = categoryService;
     }
-
     @GetMapping("/")
     public String listProducts(Model model) {
-        model.addAttribute("products", productService.findAll());
+        var products = productService.findAll();
+        System.out.println(products); // для дебага
+        model.addAttribute("products", products);
         return "admin/products/products-list";
     }
 
-    @GetMapping("/products/create")
+
+    @GetMapping("/create")
     public String showCreateProductForm(Model model) {
         model.addAttribute("product", new ProductCreateDto());
         model.addAttribute("categories", categoryService.findAll());
-        return "admin/product-create";
+        return "admin/products/product-create";
     }
 
-    @PostMapping("/products/create")
+    @PostMapping("/create")
     public String createProduct(@ModelAttribute("product") @Valid ProductCreateDto dto,
                                 BindingResult bindingResult,
                                 Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("categories", categoryService.findAll());
-            return "admin/product-create";
+            return "admin/products/product-create";
         }
         productService.create(dto);
-        return "redirect:/admin";
+        return "redirect:/admin/products/";
     }
 
 }

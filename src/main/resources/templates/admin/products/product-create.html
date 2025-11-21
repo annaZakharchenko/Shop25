@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Create Category - Admin</title>
+    <title>Create Product - Admin</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -46,7 +46,8 @@
         }
 
         .form-group input,
-        .form-group textarea {
+        .form-group textarea,
+        .form-group select {
             width: 100%;
             padding: 0.75rem;
             border: 1px solid #ddd;
@@ -54,22 +55,11 @@
             font-size: 1rem;
         }
 
-        .form-group textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
+        .form-group textarea { resize: vertical; min-height: 100px; }
 
-        .error {
-            color: #e74c3c;
-            font-size: 0.9rem;
-            margin-top: 0.25rem;
-        }
+        .error { color: #e74c3c; font-size: 0.9rem; margin-top: 0.25rem; }
 
-        .button-group {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
+        .button-group { display: flex; gap: 1rem; margin-top: 2rem; }
 
         .btn {
             flex: 1;
@@ -82,60 +72,56 @@
             text-align: center;
         }
 
-        .btn-primary {
-            background: #27ae60;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #229954;
-        }
-
-        .btn-secondary {
-            background: #95a5a6;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background: #7f8c8d;
-        }
+        .btn-primary { background: #27ae60; color: white; }
+        .btn-primary:hover { background: #229954; }
+        .btn-secondary { background: #95a5a6; color: white; }
+        .btn-secondary:hover { background: #7f8c8d; }
     </style>
 </head>
 <body>
 <div class="navbar">
-    <h1>🔧 Admin - Create Category</h1>
+    <h1>🔧 Admin - Create Product</h1>
     <div>
-        <a th:href="@{/templates/admin}">Dashboard</a>
-        <a th:href="@{/templates/user}">Categories</a>
+        <a th:href="@{/admin}">Dashboard</a>
+        <a th:href="@{/admin/products/}">Products</a>
     </div>
 </div>
 
 <div class="container">
     <div class="form-card">
-        <h1>➕ Create New Category</h1>
+        <h1>➕ Create New Product</h1>
 
-        <form th:action="@{/admin/categories/create}" th:object="${category}" method="post">
+        <form th:action="@{/admin/products/create}" th:object="${product}" method="post">
             <div class="form-group">
-                <label for="name">Category Name *</label>
-                <input type="text"
-                       id="name"
-                       th:field="*{name}"
-                       placeholder="e.g., Espresso, Cappuccino, etc."
-                       required>
+                <label for="name">Product Name *</label>
+                <input type="text" id="name" th:field="*{name}" placeholder="Enter product name" required>
                 <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
             </div>
 
             <div class="form-group">
                 <label for="description">Description</label>
-                <textarea id="description"
-                          th:field="*{description}"
-                          placeholder="Describe this category..."></textarea>
+                <textarea id="description" th:field="*{description}" placeholder="Enter product description"></textarea>
                 <div class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
             </div>
 
+            <div class="form-group">
+                <label for="price">Price *</label>
+                <input type="number" id="price" th:field="*{price}" placeholder="Enter price" step="0.01" required>
+                <div class="error" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category *</label>
+                <select id="category" th:field="*{categoryId}" required>
+                    <option value="" disabled selected>Select a category</option>
+                    <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}"></option>
+                </select>
+                <div class="error" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}"></div>
+            </div>
+
             <div class="button-group">
-                <button type="submit" class="btn btn-primary">Create Category</button>
-                <a th:href="@{/templates/admin}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Create Product</button>
+                <a th:href="@{/admin/products/}" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
     </div>

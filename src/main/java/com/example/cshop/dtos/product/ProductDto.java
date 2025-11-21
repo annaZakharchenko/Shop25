@@ -1,5 +1,6 @@
 package com.example.cshop.dtos.product;
 
+import com.example.cshop.dtos.category.CategoryDto;
 import java.math.BigDecimal;
 
 public class ProductDto {
@@ -10,6 +11,7 @@ public class ProductDto {
     private BigDecimal price;
     private String imageUrl;
     private Long categoryId;
+    private CategoryDto category; // <- добавлено
     private Integer stock;
 
     public ProductDto() {}
@@ -34,4 +36,7 @@ public class ProductDto {
 
     public Integer getStock() { return stock; }
     public void setStock(Integer stock) { this.stock = stock; }
+
+    public CategoryDto getCategory() { return category; }      // ← добавлено
+    public void setCategory(CategoryDto category) { this.category = category; } // ← добавлено
 }

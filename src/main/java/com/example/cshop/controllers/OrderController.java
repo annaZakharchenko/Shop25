@@ -4,12 +4,15 @@ import com.example.cshop.dtos.order.OrderCreateDto;
 import com.example.cshop.dtos.order.OrderDto;
 import com.example.cshop.dtos.order.OrderUpdateDto;
 import com.example.cshop.services.interfaces.OrderService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @Controller
 @RequestMapping("/orders")
@@ -21,16 +24,16 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @GetMapping
+    @GetMapping("/")
     public String listOrders(Model model) {
         model.addAttribute("orders", orderService.findAll());
-        return "order/list";
+        return "admin/orders/orders-list";
     }
 
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("order", new OrderCreateDto());
-        return "order/create";
+        return "orders/order-create";
     }
 
     @PostMapping("/create")
@@ -43,6 +46,29 @@ public class OrderController {
         return "redirect:/orders";
     }
 
+    @PostMapping("/checkout")
+    public String checkout(Authentication authentication, HttpSession session) {
+        String username = authentication.getName(); // текущий юзер
+
+        // Получаем корзину из сессии
+        @SuppressWarnings("unchecked")
+        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
+
+        if (cart == null || cart.isEmpty()) {
+            return "redirect:/cart"; // корзина пуста, редирект на корзину
+        }
+
+        // Создаём заказ через сервис
+        orderService.createOrderFromCart(username, cart);
+
+        // Очищаем корзину
+        session.removeAttribute("cart");
+
+        return "redirect:/user/myorders";
+    }
+
+
+
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
         OrderDto dto = orderService.findById(id);
@@ -50,7 +76,7 @@ public class OrderController {
         updateDto.setStatus(dto.getStatus());
         model.addAttribute("order", updateDto);
         model.addAttribute("id", id);
-        return "order/edit";
+        return "admin/order/order-edit";
     }
 
     @PostMapping("/edit/{id}")
@@ -58,10 +84,10 @@ public class OrderController {
                               @ModelAttribute("order") @Valid OrderUpdateDto dto,
                               BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "order/edit";
+            return "admin/order/order-edit";
         }
         orderService.update(id, dto);
-        return "redirect:/orders";
+        return "redirect:/admin/orders";
     }
 
     @PostMapping("/delete/{id}")

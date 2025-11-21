@@ -51,4 +51,12 @@ public class OrderItem {
 
     public Order getOrder() { return order; }
     public void setOrder(Order order) { this.order = order; }
+    public BigDecimal getPrice() {
+        return this.unitPrice;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.unitPrice = price;
+    }
 }
+
