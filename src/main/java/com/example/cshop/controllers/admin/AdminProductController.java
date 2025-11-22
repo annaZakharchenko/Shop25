@@ -58,10 +58,15 @@ public class AdminProductController {
     public String editProduct(@PathVariable Long id, Model model) {
         ProductDto productDto = productService.findById(id);
         ProductUpdateDto updateDto = productMapper.toUpdateDto(productDto);
+
+        // ВАЖНО: переносим id, если mapper этого не делает
+        updateDto.setId(id);
+
         model.addAttribute("product", updateDto);
         model.addAttribute("categories", categoryService.findAll());
         return "admin/products/product-update";
     }
+
 
 
     @PostMapping("/edit/{id}")

@@ -21,7 +21,7 @@ public class CartController {
         this.productService = productService;
     }
 
-    @GetMapping
+    @GetMapping("/")
     public String viewCart(HttpSession session, Model model) {
         @SuppressWarnings("unchecked")
         Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
@@ -41,7 +41,7 @@ public class CartController {
 
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("total", total);
-        return "cart/view";
+        return "user/cart";
     }
 
     @PostMapping("/add/{productId}")
@@ -55,11 +55,13 @@ public class CartController {
             cart = new HashMap<>();
         }
 
+        // Добавляем количество
         cart.put(productId, cart.getOrDefault(productId, 0) + quantity);
         session.setAttribute("cart", cart);
 
-        return "redirect:/cart";
+        return "redirect:/";
     }
+
 
     @PostMapping("/remove/{productId}")
     public String removeFromCart(@PathVariable Long productId, HttpSession session) {
@@ -75,19 +77,40 @@ public class CartController {
     }
 
     @PostMapping("/update/{productId}")
-    public String updateCartQuantity(@PathVariable Long productId,
-                                     @RequestParam int quantity,
-                                     HttpSession session) {
+    @ResponseBody
+    public Map<String, Object> updateCartQuantityAjax(@PathVariable Long productId,
+                                                      @RequestParam int quantity,
+                                                      HttpSession session) {
         @SuppressWarnings("unchecked")
         Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
+
+        Map<String, Object> result = new HashMap<>();
 
         if (cart != null && quantity > 0) {
             cart.put(productId, quantity);
             session.setAttribute("cart", cart);
+
+            ProductDto product = productService.findById(productId);
+            BigDecimal subtotal = product.getPrice().multiply(BigDecimal.valueOf(quantity));
+
+            BigDecimal total = BigDecimal.ZERO;
+            for (Map.Entry<Long, Integer> entry : cart.entrySet()) {
+                ProductDto p = productService.findById(entry.getKey());
+                total = total.add(p.getPrice().multiply(BigDecimal.valueOf(entry.getValue())));
+            }
+
+            result.put("success", true);
+            result.put("subtotal", subtotal);
+            result.put("total", total);
+        } else {
+            result.put("success", false);
         }
 
-        return "redirect:/cart";
+        return result;
     }
+
+
+
 
     @PostMapping("/clear")
     public String clearCart(HttpSession session) {

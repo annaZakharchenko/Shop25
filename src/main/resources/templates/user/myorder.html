@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Orders - Coffee Shop</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="navbar">
+    <h1>☕ Coffee Shop</h1>
+    <div>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/products}">Products</a>
+        <a th:href="@{/cart}">Cart</a>
+        <a th:href="@{/user/orders}">My Orders</a>
+    </div>
+</div>
+
+<div class="container">
+    <h1>📦 My Orders</h1>
+
+    <div th:if="${orders.isEmpty()}">
+        <p>You have no orders yet.</p>
+        <a th:href="@{/products}" class="btn btn-success">Start Shopping</a>
+    </div>
+
+    <div th:each="order : ${orders}" style="margin-bottom: 2rem; border: 1px solid #ddd; padding: 1rem; border-radius: 5px;">
+        <h3>Order #<span th:text="${order.id}">1</span></h3>
+        <p>Date: <span th:text="${#dates.format(order.createdAt, 'dd-MM-yyyy HH:mm')}">01-01-2025</span></p>
+        <p>Total: $<span th:text="${order.total}">0.00</span></p>
+
+        <div th:each="item : ${order.items}">
+            <p>
+                <span th:text="${item.product.name}">Product Name</span> -
+                Quantity: <span th:text="${item.quantity}">1</span> -
+                Price: $<span th:text="${item.product.price}">0.00</span>
+            </p>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

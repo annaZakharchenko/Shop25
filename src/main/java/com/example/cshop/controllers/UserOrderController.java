@@ -37,4 +37,5 @@ public class UserOrderController {
         model.addAttribute("orders", orders);
         return "user/my-orders"; // путь к Thymeleaf шаблону
     }
+
 }

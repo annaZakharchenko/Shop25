@@ -1,23 +1,31 @@
 package com.example.cshop.controllers;
 
+import com.example.cshop.dtos.order.OrderDto;
 import com.example.cshop.dtos.user.UserCreateDto;
 import com.example.cshop.dtos.user.UserDto;
 import com.example.cshop.dtos.user.UserUpdateDto;
+import com.example.cshop.services.interfaces.OrderService;
 import com.example.cshop.services.interfaces.UserService;
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
+    private final OrderService orderService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, OrderService orderService) {
         this.userService = userService;
+        this.orderService = orderService;
+
     }
 
 
@@ -26,6 +34,37 @@ public class UserController {
         model.addAttribute("user", new UserCreateDto());
         return "user/create";
     }
+    @GetMapping("/profile/{id}")
+    public String profilePageById(@PathVariable Long id, Model model) {
+        UserDto user = userService.findById(id);
+        List<OrderDto> orders = orderService.getOrdersForUserById(id);
+
+        model.addAttribute("user", user);
+        model.addAttribute("orders", orders);
+        return "user/my-profile";
+    }
+
+    @GetMapping("/profile/email")
+    public String profilePageByEmail(@RequestParam String email, Model model) {
+        UserDto user = userService.findByEmail(email);
+        List<OrderDto> orders = orderService.getOrdersForUserByEmail(email);
+
+        model.addAttribute("user", user);
+        model.addAttribute("orders", orders);
+        return "user/my-profile";
+    }
+    @GetMapping("/profile/")
+    public String profilePage(Model model, Authentication authentication) {
+        String email = authentication.getName();
+        UserDto user = userService.findByEmail(email);
+        List<OrderDto> orders = orderService.getOrdersForUserByEmail(email);
+
+        model.addAttribute("user", user);
+        model.addAttribute("orders", orders);
+
+        return "user/my-profile"; // имя файла без .html
+    }
+
 
     @PostMapping("/create")
     public String createUser(@ModelAttribute("user") @Valid UserCreateDto dto,

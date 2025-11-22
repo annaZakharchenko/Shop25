@@ -119,6 +119,19 @@
                 <div class="error" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}"></div>
             </div>
 
+            <!-- NEW FIELDS -->
+            <div class="form-group">
+                <label for="imageUrl">Image URL *</label>
+                <input type="text" id="imageUrl" th:field="*{imageUrl}" placeholder="Enter image URL" required>
+                <div class="error" th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="stock">Stock Quantity *</label>
+                <input type="number" id="stock" th:field="*{stock}" placeholder="Enter stock quantity" min="0" required>
+                <div class="error" th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}"></div>
+            </div>
+
             <div class="button-group">
                 <button type="submit" class="btn btn-primary">Create Product</button>
                 <a th:href="@{/admin/products/}" class="btn btn-secondary">Cancel</a>

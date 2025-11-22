@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 
 public class ProductUpdateDto {
 
+    private Long id;
     @NotBlank
     private String name;
 
@@ -24,6 +25,9 @@ public class ProductUpdateDto {
     private Integer stock;
 
     public ProductUpdateDto() {}
+
+    public Long getId() {return id;}
+    public void setId(Long id) {this.id = id;}
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

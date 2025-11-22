@@ -18,4 +18,9 @@ public interface OrderService {
 
     OrderDto update(Long id, OrderUpdateDto dto);
     void delete(Long id);
+
+
+    List<OrderDto> getOrdersForUserById(Long userId);
+
+    List<OrderDto> getOrdersForUserByEmail(String email);
 }

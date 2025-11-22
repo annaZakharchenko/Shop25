@@ -44,6 +44,14 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         return productMapper.toDto(product);
     }
+    @Override
+    public List<ProductDto> findByCategoryId(Long categoryId) {
+        return productRepository.findByCategoryId(categoryId)
+                .stream()
+                .map(productMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public ProductDto create(ProductCreateDto dto) {

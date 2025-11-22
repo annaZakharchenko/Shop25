@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Coffee Shop - Home</title>
@@ -123,31 +123,35 @@
 </head>
 <body>
 <!-- Navbar -->
+<!-- Navbar -->
 <div class="navbar">
     <h1>☕ Coffee Shop</h1>
     <div>
         <a th:href="@{/}">Home</a>
-        <a th:href="@{/products}">Products</a>
 
-        <span th:if="${isAuthenticated}">
-                <a th:href="@{/cart}">Cart</a>
-                <a th:href="@{/profile}">Profile</a>
-                <a th:if="${isAdmin}" th:href="@{/admin/dashboard}">Dashboard</a>
-                <form th:action="@{/auth/logout}" method="post" style="display: inline;">
-                    <button type="submit" style="background: none; border: none; color: white; cursor: pointer;">Logout</button>
-                </form>
-            </span>
+        <!-- Для авторизованных -->
+        <span sec:authorize="isAuthenticated()">
+            <a th:href="@{/cart/}" style="padding:0.5rem 1rem;background-color:#27ae60;color:white;border-radius:5px;margin-right:0.5rem;">Cart</a>
+            <a th:href="@{/users/profile/}"
+               style="padding:0.5rem 1rem;background-color:#3498db;color:white;border-radius:5px;margin-right:0.5rem;">Profile</a>
 
-        <span th:unless="${isAuthenticated}">
-                <a th:href="@{/auth/login}">Login</a>
-                <a th:href="@{/auth/register}">Register</a>
-            </span>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard}" style="padding:0.5rem 1rem;background-color:#e74c3c;color:white;border-radius:5px;">Dashboard</a>
+            <form th:action="@{/auth/logout}" method="post" style="display:inline;">
+                <button type="submit" style="background:none;border:none;color:white;cursor:pointer;padding:0.5rem 1rem;">Logout</button>
+            </form>
+        </span>
+
+        <!-- Для неавторизованных -->
+        <span sec:authorize="!isAuthenticated()">
+            <a th:href="@{/auth/login}">Login</a>
+            <a th:href="@{/auth/register}">Register</a>
+        </span>
     </div>
 </div>
 
 <div class="container">
     <!-- Admin Panel -->
-    <div th:if="${isAdmin}" class="admin-panel">
+    <div sec:authorize="hasRole('ADMIN')" class="admin-panel">
         <h2>🔧 Admin Quick Actions</h2>
         <div class="buttons">
             <a th:href="@{/admin/products/create}" class="btn">+ Add Product</a>
@@ -157,48 +161,53 @@
     </div>
 
     <!-- Categories -->
-    <div class="categories">
-        <h2>Categories</h2>
+    <div class="category-filter">
+        <strong>Filter by category:</strong>
         <div class="category-list">
-            <a th:href="@{/products}" class="category-item">All Products</a>
-            <a th:each="category : ${categories}"
-               th:href="@{/products/by-category/{id}(id=${category.id})}"
-               th:text="${category.name}"
+            <a th:href="@{/}" th:classappend="${category == null} ? 'active' : ''" class="category-item">All Products</a>
+            <a th:each="cat : ${categories}"
+               th:href="@{/?categoryId={id}(id=${cat.id})}"
+               th:text="${cat.name}"
+               th:classappend="${category != null and category.id == cat.id} ? 'active' : ''"
                class="category-item"></a>
         </div>
     </div>
 
     <!-- Products -->
-    <h2 style="margin-bottom: 1rem;">Our Products</h2>
-    <div class="products">
+    <!-- Products -->
+    <h2 style="margin-bottom:1rem;">Our Products</h2>
+
+    <!-- Сообщение, если нет продуктов -->
+    <div th:if="${#lists.isEmpty(products)}" style="margin: 1rem 0; font-size: 1rem; color: #e74c3c;">
+        Нет продуктов в выбранной категории.
+    </div>
+
+    <div class="products" th:unless="${#lists.isEmpty(products)}">
         <div th:each="product : ${products}" class="product-card">
-            <img th:if="${product.imageUrl != null}"
-                 th:src="${product.imageUrl}"
-                 th:alt="${product.name}">
-            <img th:unless="${product.imageUrl != null}"
-                 src="https://via.placeholder.com/250x200?text=No+Image"
-                 alt="No image">
+            <img th:if="${product.imageUrl != null}" th:src="${product.imageUrl}" th:alt="${product.name}">
+            <img th:unless="${product.imageUrl != null}" src="https://via.placeholder.com/250x200?text=No+Image" alt="No image">
 
             <div class="product-card-body">
                 <h3 th:text="${product.name}">Product Name</h3>
                 <p th:if="${product.description != null}"
                    th:text="${#strings.abbreviate(product.description, 80)}"
-                   style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;"></p>
+                   style="font-size:0.9rem;color:#666;margin-bottom:0.5rem;"></p>
                 <div class="price" th:text="${'$' + product.price}">$0.00</div>
                 <div class="stock" th:text="${'Stock: ' + product.stock}">Stock: 0</div>
 
                 <div class="btn-group">
-                    <a th:href="@{/products/detail/{id}(id=${product.id})}"
-                       class="btn btn-primary">View Details</a>
-                    <form th:if="${isAuthenticated}"
-                          th:action="@{/cart/add/{id}(id=${product.id})}"
-                          method="post" style="flex: 1;">
-                        <button type="submit" class="btn btn-success" style="width: 100%;">Add to Cart</button>
-                    </form>
+                    <a th:href="@{/products/detail/{id}(id=${product.id})}" class="btn btn-primary">View Details</a><form th:if="${isAuthenticated}"
+                                                                                                                          th:action="@{/cart/add/{id}(id=${product.id})}"
+                                                                                                                          method="post">
+                    <input type="hidden" name="quantity" value="1"/>
+                    <button type="submit" class="btn btn-success" style="width: 100%;">Add to Cart</button>
+                </form>
+
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 </body>
 </html>

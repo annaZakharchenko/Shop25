@@ -12,4 +12,6 @@ public interface UserService {
     UserDto create(UserCreateDto dto);
     UserDto update(Long id, UserUpdateDto dto);
     void delete(Long id);
+
+    UserDto findByEmail(String email);
 }

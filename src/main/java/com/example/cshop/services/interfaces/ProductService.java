@@ -10,6 +10,7 @@ public interface ProductService {
     List<ProductDto> findAll();
 
     ProductDto findById(Long id);
+    List<ProductDto> findByCategoryId(Long categoryId);
 
     ProductDto create(ProductCreateDto dto);
 

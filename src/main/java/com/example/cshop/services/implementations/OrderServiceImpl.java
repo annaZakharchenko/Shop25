@@ -112,4 +112,27 @@ public class OrderServiceImpl implements OrderService {
     public void delete(Long id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public List<OrderDto> getOrdersForUserById(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+
+        return repository.findByUser(user).stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<OrderDto> getOrdersForUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return repository.findByUser(user)
+                .stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+
 }

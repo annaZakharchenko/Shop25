@@ -48,24 +48,24 @@ public class OrderController {
 
     @PostMapping("/checkout")
     public String checkout(Authentication authentication, HttpSession session) {
-        String username = authentication.getName(); // текущий юзер
+        String username = authentication.getName();
 
-        // Получаем корзину из сессии
         @SuppressWarnings("unchecked")
         Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
 
         if (cart == null || cart.isEmpty()) {
-            return "redirect:/cart"; // корзина пуста, редирект на корзину
+            return "redirect:/cart"; // корзина пуста
         }
 
-        // Создаём заказ через сервис
+        // Создание заказа
         orderService.createOrderFromCart(username, cart);
 
-        // Очищаем корзину
+        // Очистка корзины
         session.removeAttribute("cart");
 
-        return "redirect:/user/myorders";
+        return "redirect:/user/myorders"; // редирект на страницу заказов пользователя
     }
+
 
 
 
