@@ -40,17 +40,35 @@
             <th>Name</th>
             <th>Category</th>
             <th>Price</th>
+            <th>Actions</th>
         </tr>
         </thead>
 
         <tbody>
         <tr th:each="p : ${products}">
-            <td th:text="${p.id}">1</td>
-            <td th:text="${p.name}">Name</td>
-            <td th:text="${p.category != null ? p.category.name : 'No Category'}">Category</td>
-            <td th:text="${p.price != null ? p.price : '0.00'}">10.00</td>
+            <td th:text="${p.id}"></td>
+            <td th:text="${p.name}"></td>
+            <td th:text="${p.category != null ? p.category.name : 'No Category'}"></td>
+            <td th:text="${p.price}"></td>
+
+            <td>
+                <div style="display:flex; gap:10px;">
+                    <!-- EDIT BUTTON -->
+                    <a th:href="@{'/admin/products/edit/' + ${p.id}}" class="btn btn-edit">Edit
+                    </a>
+
+                    <!-- DELETE BUTTON -->
+                    <form th:action="@{'/admin/products/delete/' + ${p.id}}" method="post">
+                        <button type="submit"
+                                style="padding:8px 14px; background:#e74c3c; color:white; border:none; border-radius:5px; cursor:pointer;">
+                            🗑 Delete
+                        </button>
+                    </form>
+                </div>
+            </td>
         </tr>
         </tbody>
+
     </table>
 </div>
 

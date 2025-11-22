@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Product - Admin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; }
+
+        .navbar {
+            background: #e67e22;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .container { max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+
+        .form-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .form-card h1 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea { resize: vertical; min-height: 100px; }
+
+        .button-group { display: flex; gap: 1rem; margin-top: 2rem; }
+
+        .btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-save { background: #27ae60; color: white; }
+        .btn-save:hover { background: #229954; }
+
+        .btn-cancel { background: #95a5a6; color: white; }
+        .btn-cancel:hover { background: #7f8c8d; }
+
+        .error { color: #e74c3c; font-size: 0.9rem; margin-top: 0.25rem; }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <h1>✏ Edit Product</h1>
+    <div>
+        <a th:href="@{/admin}">Dashboard</a>
+        <a th:href="@{/admin/products/}">Products</a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="form-card">
+        <h1>Update Product</h1>
+
+        <!-- Форма редактирования -->
+        <form th:action="@{'/admin/products/edit/' + ${product.id}}" th:object="${product}" method="post">
+
+
+            <div class="form-group">
+                <label for="name">Name *</label>
+                <input type="text" id="name" th:field="*{name}" placeholder="Enter product name" required>
+                <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" th:field="*{description}" placeholder="Enter product description"></textarea>
+                <div class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Price *</label>
+                <input type="number" id="price" th:field="*{price}" placeholder="Enter price" step="0.01" required>
+                <div class="error" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category *</label>
+                <select id="category" th:field="*{categoryId}" required>
+                    <option value="" disabled>Select a category</option>
+                    <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}"></option>
+                </select>
+                <div class="error" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}"></div>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn btn-save">Save</button>
+                <a th:href="@{/admin/products/}" class="btn btn-cancel">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

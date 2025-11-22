@@ -8,13 +8,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(componentModel = "spring", uses = {CategoryMapper.class})
+@Mapper(componentModel = "spring")
 public interface ProductMapper {
-
-    @Mapping(source = "category", target = "category") // добавляем маппинг категории
     ProductDto toDto(Product product);
-
+    ProductUpdateDto toUpdateDto(ProductDto dto);
     Product toEntity(ProductCreateDto dto);
-
     void updateEntity(ProductUpdateDto dto, @MappingTarget Product product);
 }
+
