@@ -54,7 +54,7 @@ public class OrderController {
         Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
 
         if (cart == null || cart.isEmpty()) {
-            return "redirect:/cart"; // корзина пуста
+            return "redirect:/cart?empty"; // корзина пуста
         }
 
         // Создание заказа

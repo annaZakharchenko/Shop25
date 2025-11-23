@@ -229,6 +229,7 @@
 
         <div class="item-card" th:each="item : ${order.items}">
             <div>
+                <img th:src="@{${item.productImageUrl}}" alt="Product Image">
                 <div class="item-name" th:text="${item.productName}">Product</div>
                 <div class="item-details">
                     Qty: <span th:text="${item.quantity}"></span> ×

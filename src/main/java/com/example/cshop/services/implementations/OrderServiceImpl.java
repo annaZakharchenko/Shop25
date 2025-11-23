@@ -130,6 +130,15 @@ public class OrderServiceImpl implements OrderService {
             Product product = productRepository.findById(productId)
                     .orElseThrow(() -> new RuntimeException("Product not found: " + productId));
 
+            // Проверяем наличие на складе
+            if (product.getStock() < quantity) {
+                throw new RuntimeException("Недостаточно товаров на складе: " + product.getName());
+            }
+
+            // уменьшаем stock
+            product.setStock(product.getStock() - quantity);
+            productRepository.save(product);
+
             OrderItem orderItem = new OrderItem();
             orderItem.setProduct(product);
             orderItem.setQuantity(quantity);
@@ -145,6 +154,7 @@ public class OrderServiceImpl implements OrderService {
         Order savedOrder = repository.save(order);
         return mapper.toDto(savedOrder);
     }
+
 
 
     @Override

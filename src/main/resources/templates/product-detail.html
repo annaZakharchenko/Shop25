@@ -115,7 +115,7 @@
 <div class="navbar">
     <h1>☕ Coffee Shop</h1>
     <div>
-        <a th:href="@{/static}">Home</a>
+        <a th:href="@{/}">Home</a>
         <a th:href="@{/products}">Products</a>
     </div>
 </div>
@@ -147,7 +147,7 @@
                     <input type="number" id="quantity" name="quantity" value="1" min="1" th:max="${product.stock}">
                 </div>
 
-                <button type="submit" class="btn btn-success">🛒 Add to Cart</button>
+                <button type="submit" th:disabled="${product.stock == 0}" class="btn btn-success">🛒 Add to Cart</button>
                 <a class="btn btn-secondary" onclick="history.back();">← Back to Products</a>
 
             </form>
