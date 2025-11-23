@@ -104,6 +104,11 @@
             margin-bottom: 1rem;
             color: #7f8c8d;
         }
+
+        .cart-item .remove {
+            flex: 0.5;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -147,7 +152,13 @@
         <div class="price">
             $<span th:text="${item.unitPrice}">0.00</span>
         </div>
+        <div class="remove">
+            <form th:action="@{/cart/remove/{productId}(productId=${item.productId})}" method="post">
+                <button type="submit" style="background:#e74c3c;color:white;border:none;padding:0.5rem 1rem;border-radius:5px;cursor:pointer;">Remove</button>
+            </form>
+        </div>
     </div>
+
 
     <div class="total">
         Total: $<span th:text="${total}">0.00</span>

@@ -24,7 +24,7 @@ public class CartController {
         this.productService = productService;
     }
 
-    @GetMapping("/")
+    @GetMapping({"","/"})
     public String showCart(HttpSession session, Model model) {
         @SuppressWarnings("unchecked")
         Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
@@ -125,6 +125,6 @@ public class CartController {
     @PostMapping("/clear")
     public String clearCart(HttpSession session) {
         session.removeAttribute("cart");
-        return "redirect:/cart";
+        return "redirect:/cart/";
     }
 }
