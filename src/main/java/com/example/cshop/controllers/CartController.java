@@ -89,7 +89,8 @@ public class CartController {
 
 
     @PostMapping("/remove/{productId}")
-    public String removeFromCart(@PathVariable Long productId, HttpSession session) {
+    @ResponseBody
+    public Map<String, Object> removeFromCartAjax(@PathVariable Long productId, HttpSession session) {
         @SuppressWarnings("unchecked")
         Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
 
@@ -98,8 +99,24 @@ public class CartController {
             session.setAttribute("cart", cart);
         }
 
-        return "redirect:/cart";
+        // считаем общее кол-во и сумму
+        BigDecimal total = BigDecimal.ZERO;
+        int itemCount = 0;
+        if(cart != null) {
+            for (Map.Entry<Long, Integer> entry : cart.entrySet()) {
+                ProductDto p = productService.findById(entry.getKey());
+                total = total.add(p.getPrice().multiply(BigDecimal.valueOf(entry.getValue())));
+                itemCount += entry.getValue();
+            }
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", true);
+        result.put("total", total);
+        result.put("itemCount", itemCount);
+        return result;
     }
+
 
     @PostMapping("/update/{productId}")
     @ResponseBody

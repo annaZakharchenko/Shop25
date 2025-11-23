@@ -210,18 +210,18 @@
 
                             showNotification('Added to cart successfully!', 'success');
                             btn.disabled = false;
-                            btn.innerHTML = '<span class="icon">🛒</span> Add to Cart';
+                            btn.innerHTML = 'Buy';
                         } else {
                             showNotification('Error adding to cart', 'error');
                             btn.disabled = false;
-                            btn.innerHTML = '<span class="icon">🛒</span> Add to Cart';
+                            btn.innerHTML = 'Buy';
                         }
                     })
                     .catch(err => {
                         console.error(err);
                         showNotification('Error adding to cart', 'error');
                         btn.disabled = false;
-                        btn.innerHTML = '<span class="icon">🛒</span> Add to Cart';
+                        btn.innerHTML = 'Buy';
                     });
             });
         });
