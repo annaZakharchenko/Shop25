@@ -2,215 +2,188 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Coffee Shop - Home</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #f5f5f5; }
-
-        .navbar {
-            background: #2c3e50;
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .navbar h1 { font-size: 1.5rem; }
-        .navbar a { color: white; text-decoration: none; margin: 0 1rem; }
-        .navbar a:hover { text-decoration: underline; }
-
-        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
-
-        .admin-panel {
-            background: #fff;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .admin-panel h2 { margin-bottom: 1rem; color: #e74c3c; }
-        .admin-panel .buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
-        .admin-panel .btn {
-            padding: 0.75rem 1.5rem;
-            background: #3498db;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-        }
-        .admin-panel .btn:hover { background: #2980b9; }
-
-        .categories {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .categories h2 { margin-bottom: 1rem; }
-        .category-list {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-        .category-item {
-            padding: 0.75rem 1.5rem;
-            background: #ecf0f1;
-            border-radius: 5px;
-            text-decoration: none;
-            color: #2c3e50;
-        }
-        .category-item:hover { background: #bdc3c7; }
-
-        .products {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-        .product-card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-        }
-        .product-card:hover { transform: translateY(-5px); }
-        .product-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            background: #ddd;
-        }
-        .product-card-body {
-            padding: 1rem;
-        }
-        .product-card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
-        .product-card .price {
-            color: #e74c3c;
-            font-size: 1.25rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-        .product-card .stock {
-            color: #27ae60;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-        .product-card .btn-group {
-            display: flex;
-            gap: 0.5rem;
-        }
-        .product-card .btn {
-            flex: 1;
-            padding: 0.5rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-        .btn-primary { background: #3498db; color: white; }
-        .btn-primary:hover { background: #2980b9; }
-        .btn-success { background: #27ae60; color: white; }
-        .btn-success:hover { background: #229954; }
-        #cart-counter { position:fixed; top:10px; right:10px; background:#e74c3c; color:white; padding:0.5rem 1rem; border-radius:50%; font-weight:bold; }
-
-    </style>
+    <title>Mocha Dreams - Premium Coffee Shop</title>
+    <link rel="stylesheet" th:href="@{/main.css}">
 </head>
 <body>
 
-<!-- Navbar -->
-<div class="navbar">
-    <h1>☕ Coffee Shop</h1>
-    <div>
-        <a th:href="@{/}">Home</a>
-        <span sec:authorize="isAuthenticated()">
-            <a th:href="@{/cart/}" style="padding:0.5rem 1rem;background-color:#27ae60;color:white;border-radius:5px;margin-right:0.5rem;">Cart</a>
-            <a th:href="@{/users/profile/}" style="padding:0.5rem 1rem;background-color:#3498db;color:white;border-radius:5px;margin-right:0.5rem;">Profile</a>
-         <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard}" style="padding:0.5rem 1rem;background-color:#e74c3c;color:white;border-radius:5px;">Dashboard</a>
-            <form th:action="@{/auth/logout}" method="post" style="display:inline;">
-                <button type="submit" style="background:none;border:none;color:white;cursor:pointer;padding:0.5rem 1rem;">Logout</button>
+<!-- Header with Brand -->
+<header class="site-header">
+    <div class="brand-container">
+        <div class="brand">
+            <span class="brand-icon">☕</span>
+            <span class="brand-name">Mocha Dreams</span>
+            <span class="brand-tagline">Premium Coffee Experience</span>
+        </div>
+    </div>
+</header>
+
+<!-- Navigation Bar -->
+<nav class="main-nav">
+    <div class="nav-container">
+        <!-- Guest Navigation -->
+        <div sec:authorize="!isAuthenticated()" class="nav-links">
+            <a th:href="@{/auth/login}" class="nav-link">
+                <span class="icon"></span> Login
+            </a>
+            <a th:href="@{/auth/register}" class="nav-link">
+                <span class="icon"></span> Register
+            </a>
+        </div>
+
+        <!-- Authenticated User Navigation -->
+        <div sec:authorize="isAuthenticated()" class="nav-links">
+            <a th:href="@{/}" class="nav-link active">
+                Home
+            </a>
+            <a th:href="@{/cart/}" class="nav-link">
+                 Cart
+                <span class="cart-badge" th:if="${cartItemCount > 0}" th:text="${cartItemCount}">0</span>
+            </a>
+            <a th:href="@{/users/profile/}" class="nav-link">
+                 Profile
+            </a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard}" class="nav-link admin-link">
+                 Dashboard
+            </a>
+        </div>
+
+        <!-- Logout Button -->
+        <div sec:authorize="isAuthenticated()" class="nav-logout">
+            <form th:action="@{/auth/logout}" method="post" class="logout-form">
+                <button type="submit" class="logout-btn">
+                    Logout
+                </button>
             </form>
-        </span>
-        <span sec:authorize="!isAuthenticated()">
-            <a th:href="@{/auth/login}">Login</a>
-            <a th:href="@{/auth/register}">Register</a>
-        </span>
-    </div>
-</div>
-
-<!-- Счетчик товаров в корзине -->
-<div id="cart-counter">
-    <span th:text="${cartItemCount}">0</span>
-</div>
-
-<div class="container">
-    <!-- Admin Panel -->
-    <div sec:authorize="hasRole('ADMIN')" class="admin-panel">
-        <h2>🔧 Admin Quick Actions</h2>
-        <div class="buttons">
-            <a th:href="@{/admin/products/create}" class="btn">+ Add Product</a>
-            <a th:href="@{/admin/categories/create}" class="btn">+ Add Category</a>
-            <a th:href="@{/orders/}" class="btn">View All Orders</a>
         </div>
     </div>
+</nav>
 
-    <!-- Categories -->
-    <div class="category-filter">
-        <strong>Filter by category:</strong>
-        <div class="category-list">
-            <a th:href="@{/}" th:classappend="${category == null} ? 'active' : ''" class="category-item">All Products</a>
-            <a th:each="cat : ${categories}"
-               th:href="@{/?categoryId={id}(id=${cat.id})}"
-               th:text="${cat.name}"
-               th:classappend="${category != null and category.id == cat.id} ? 'active' : ''"
-               class="category-item"></a>
-        </div>
-    </div>
+<!-- Main Content -->
+<main class="main-content">
+    <div class="container">
 
-    <h2 style="margin-bottom:1rem;">Our Products</h2>
-
-    <div th:if="${#lists.isEmpty(products)}" style="margin:1rem 0; color:#e74c3c;">
-        Нет продуктов в выбранной категории.
-    </div>
-
-    <div class="products" th:unless="${#lists.isEmpty(products)}">
-        <div th:each="product : ${products}" class="product-card">
-            <img th:if="${product.imageUrl != null}" th:src="${product.imageUrl}" th:alt="${product.name}">
-            <img th:unless="${product.imageUrl != null}" src="https://via.placeholder.com/250x200?text=No+Image" alt="No image">
-
-            <div class="product-card-body">
-                <h3 th:text="${product.name}">Product Name</h3>
-                <div class="price" th:text="'$' + ${product.price}">$0.00</div>
-                <div class="btn-group">
-                    <a th:href="@{/products/detail/{id}(id=${product.id})}" class="btn btn-primary">View Details</a>
-
-                    <button class="btn btn-success add-to-cart-btn"
-                            th:data-id="${product.id}" th:data-quantity="1">
-                        Add to Cart
-                    </button>
-                </div>
+        <!-- Admin Panel -->
+        <section sec:authorize="hasRole('ADMIN')" class="admin-panel">
+            <h2 class="section-title">
+                 Admin Quick Actions
+            </h2>
+            <div class="admin-actions">
+                <a th:href="@{/admin/products/create}" class="admin-btn">
+                      Add Product
+                </a>
+                <a th:href="@{/admin/categories/create}" class="admin-btn">
+                     Add Category
+                </a>
+                <a th:href="@{/orders/}" class="admin-btn">
+                     View Orders
+                </a>
             </div>
-        </div>
+        </section>
+
+        <!-- Category Filter -->
+        <section class="category-section">
+            <h2 class="section-title">
+                Browse by Category
+            </h2>
+            <div class="category-filter">
+                <a th:href="@{/}"
+                   th:classappend="${category == null} ? 'active' : ''"
+                   class="category-chip">
+                    All Products
+                </a>
+                <a th:each="cat : ${categories}"
+                   th:href="@{/?categoryId={id}(id=${cat.id})}"
+                   th:text="${cat.name}"
+                   th:classappend="${category != null and category.id == cat.id} ? 'active' : ''"
+                   class="category-chip"></a>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section class="products-section">
+            <h2 class="section-title">
+                <span class="icon">☕</span> Our Premium Collection
+            </h2>
+
+            <!-- Empty State -->
+            <div th:if="${#lists.isEmpty(products)}" class="empty-state">
+                <h3>No products available</h3>
+                <p>Check back soon for new arrivals!</p>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="products-grid" th:unless="${#lists.isEmpty(products)}">
+                <article th:each="product : ${products}" class="product-card">
+                    <div class="product-image">
+                        <img th:if="${product.imageUrl != null}"
+                             th:src="${product.imageUrl}"
+                             th:alt="${product.name}">
+                        <img th:unless="${product.imageUrl != null}"
+                             src="https://via.placeholder.com/300x300?text=No+Image"
+                             alt="No image">
+                        <div class="product-badge" th:if="${product.stock < 10 && product.stock > 0}">
+                            Limited Stock
+                        </div>
+                        <div class="product-badge sold-out" th:if="${product.stock == 0}">
+                            Sold Out
+                        </div>
+                    </div>
+
+                    <div class="product-body">
+                        <h3 class="product-name" th:text="${product.name}">Product Name</h3>
+                        <p class="product-description"
+                           th:if="${product.description != null}"
+                           th:text="${#strings.abbreviate(product.description, 60)}">
+                            Description
+                        </p>
+
+                        <div class="product-footer">
+                            <div class="product-price" th:text="'$' + ${product.price}">$0.00</div>
+                            <div class="product-stock" th:text="'Stock: ' + ${product.stock}">Stock: 0</div>
+                        </div>
+
+                        <div class="product-actions">
+                            <a th:href="@{/products/detail/{id}(id=${product.id})}"
+                               class="btn btn-secondary">
+                                View Details
+                            </a>
+                            <button class="btn btn-primary add-to-cart-btn"
+                                    th:data-id="${product.id}"
+                                    th:data-quantity="1"
+                                    th:disabled="${product.stock == 0}">
+                                 Buy
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
     </div>
+</main>
 
-</div>
+<!-- Footer -->
+<footer class="site-footer">
+    <div class="container">
+        <p>&copy; 2025 Mocha Dreams. All rights reserved.</p>
+        <p>Premium Coffee Experience, Delivered to Your Door</p>
+    </div>
+</footer>
 
+<!-- JavaScript -->
 <script th:inline="javascript">
-    /* <![CDATA[ */
     document.addEventListener('DOMContentLoaded', function() {
         const addButtons = document.querySelectorAll('.add-to-cart-btn');
 
         addButtons.forEach(btn => {
             btn.addEventListener('click', function() {
+                if (btn.disabled) return;
+
                 const productId = btn.getAttribute('data-id');
                 const quantity = btn.getAttribute('data-quantity');
+
+                btn.disabled = true;
+                btn.textContent = 'Adding...';
 
                 fetch('/cart/add-ajax/' + productId + '?quantity=' + quantity, {
                     method: 'POST',
@@ -222,19 +195,55 @@
                     .then(res => res.json())
                     .then(data => {
                         if(data.success) {
-                            // Обновляем счетчик товаров в корзине
-                            const counter = document.getElementById('cart-counter').querySelector('span');
-                            counter.textContent = data.itemCount;
-                            alert('Товар добавлен в корзину!');
+                            const badge = document.querySelector('.cart-badge');
+                            if (badge) {
+                                badge.textContent = data.itemCount;
+                            } else {
+                                const cartLink = document.querySelector('a[href*="/cart"]');
+                                if (cartLink) {
+                                    const newBadge = document.createElement('span');
+                                    newBadge.className = 'cart-badge';
+                                    newBadge.textContent = data.itemCount;
+                                    cartLink.appendChild(newBadge);
+                                }
+                            }
+
+                            showNotification('Added to cart successfully!', 'success');
+                            btn.disabled = false;
+                            btn.innerHTML = '<span class="icon">🛒</span> Add to Cart';
                         } else {
-                            alert('Ошибка при добавлении товара.');
+                            showNotification('Error adding to cart', 'error');
+                            btn.disabled = false;
+                            btn.innerHTML = '<span class="icon">🛒</span> Add to Cart';
                         }
                     })
-                    .catch(err => console.error(err));
+                    .catch(err => {
+                        console.error(err);
+                        showNotification('Error adding to cart', 'error');
+                        btn.disabled = false;
+                        btn.innerHTML = '<span class="icon">🛒</span> Add to Cart';
+                    });
             });
         });
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
     });
-    /* ]]> */
 </script>
 
 </body>
