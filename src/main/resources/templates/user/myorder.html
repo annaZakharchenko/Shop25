@@ -5,45 +5,58 @@
     <title>Order Details</title>
     <style>
         body { font-family: Arial; background: #f5f3f0; padding: 20px; }
-        .box { background: #fff; padding: 20px; border-radius: 8px; width: 70%; margin: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 10px; border-bottom: 1px solid #ddd; }
-        th { background: #eee; }
+        .container { max-width: 900px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; }
+        h2, h3 { margin-top: 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border-bottom: 1px solid #ddd; text-align: center; }
+        th { background-color: #eee; }
+        img { max-width: 100px; max-height: 100px; border-radius: 4px; }
+        .back-link { margin-top: 20px; display: inline-block; }
     </style>
 </head>
-
 <body>
 
-<div class="box">
+<div class="container">
     <h2>Order #<span th:text="${order.id}"></span></h2>
-
-    <p><strong>Date:</strong> <span th:text="${#dates.format(order.orderDate, 'dd.MM.yyyy HH:mm')}"></span></p>
+    <p><strong>Date:</strong> <span th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy HH:mm')}"></span></p>
     <p><strong>Total:</strong> €<span th:text="${order.total}"></span></p>
     <p><strong>Status:</strong> <span th:text="${order.status}"></span></p>
 
-    <h3>Items:</h3>
+    <h3>Products in this order:</h3>
 
     <table>
         <thead>
         <tr>
+            <th>Image</th>
             <th>Product</th>
             <th>Qty</th>
-            <th>Price (€)</th>
+            <th>Unit Price (€)</th>
+            <th>Subtotal (€)</th>
         </tr>
         </thead>
-
         <tbody>
         <tr th:each="item : ${order.items}">
+            <td>
+
+                <img th:src="@{${item.productImageUrl}}"  alt="No image"/>
+            </td>
             <td th:text="${item.productName}"></td>
             <td th:text="${item.quantity}"></td>
             <td th:text="${item.unitPrice}"></td>
+            <td th:text="${item.subtotal}"></td>
+        </tr>
+
+        <tr th:if="${#lists.isEmpty(order.items)}">
+            <td colspan="5">No items in this order.</td>
+        </tr>
+        <tr>
+            <td colspan="4" style="text-align: right;"><strong>Total:</strong></td>
+            <td th:text="${order.total}"></td>
         </tr>
         </tbody>
     </table>
 
-    <br>
-    <a th:href="@{/users/profile/}">← Back to Profile</a>
-
+    <a class="back-link" th:href="@{/users/profile/}">← Back to Profile</a>
 </div>
 
 </body>
