@@ -14,7 +14,7 @@ public interface OrderService {
     OrderDto create(OrderCreateDto dto);
 
     @Transactional
-    OrderDto createOrderFromCart(String username, Map<Long, Integer> cart);
+    OrderDto createOrderFromCart(String userEmail, Map<Long, Integer> cart);
 
     OrderDto update(Long id, OrderUpdateDto dto);
     void delete(Long id);

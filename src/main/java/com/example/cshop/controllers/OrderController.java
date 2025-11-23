@@ -48,7 +48,7 @@ public class OrderController {
 
     @PostMapping("/checkout")
     public String checkout(Authentication authentication, HttpSession session) {
-        String username = authentication.getName();
+        String email = authentication.getName();
 
         @SuppressWarnings("unchecked")
         Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
@@ -58,12 +58,12 @@ public class OrderController {
         }
 
         // Создание заказа
-        orderService.createOrderFromCart(username, cart);
+        orderService.createOrderFromCart(email, cart);
 
         // Очистка корзины
         session.removeAttribute("cart");
 
-        return "redirect:/user/myorders"; // редирект на страницу заказов пользователя
+        return "redirect:/user/profile/"; // редирект на страницу заказов пользователя
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.cshop.controllers;
 
+import com.example.cshop.dtos.orderitemdto.OrderItemDto;
 import com.example.cshop.dtos.product.ProductDto;
 import com.example.cshop.services.interfaces.ProductService;
 import jakarta.servlet.http.HttpSession;
@@ -8,7 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -22,26 +25,33 @@ public class CartController {
     }
 
     @GetMapping("/")
-    public String viewCart(HttpSession session, Model model) {
+    public String showCart(HttpSession session, Model model) {
         @SuppressWarnings("unchecked")
         Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
-
         if (cart == null) {
             cart = new HashMap<>();
         }
 
-        Map<ProductDto, Integer> cartItems = new HashMap<>();
+        List<OrderItemDto> items = new ArrayList<>();
         BigDecimal total = BigDecimal.ZERO;
 
         for (Map.Entry<Long, Integer> entry : cart.entrySet()) {
             ProductDto product = productService.findById(entry.getKey());
-            cartItems.put(product, entry.getValue());
+
+            OrderItemDto orderItem = new OrderItemDto();
+            orderItem.setProductId(product.getId());
+            orderItem.setProductName(product.getName());
+            orderItem.setUnitPrice(product.getPrice());
+            orderItem.setQuantity(entry.getValue());
+
+            items.add(orderItem);
             total = total.add(product.getPrice().multiply(BigDecimal.valueOf(entry.getValue())));
         }
 
-        model.addAttribute("cartItems", cartItems);
+        model.addAttribute("items", items);
         model.addAttribute("total", total);
-        return "user/cart";
+
+        return "user/cart"; // путь к твоему Thymeleaf шаблону
     }
 
     @PostMapping("/add/{productId}")

@@ -1,13 +1,19 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Shopping Cart - Coffee Shop</title>
+    <title>Your Cart - Coffee Shop</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #f5f5f5; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
 
+        /* Navbar */
         .navbar {
             background: #2c3e50;
             color: white;
@@ -16,246 +22,152 @@
             justify-content: space-between;
             align-items: center;
         }
-        .navbar h1 { font-size: 1.5rem; }
-        .navbar a { color: white; text-decoration: none; margin: 0 1rem; }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 0.5rem;
+        }
+        .navbar a:hover {
+            text-decoration: underline;
+        }
 
-        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
 
-        .cart-header {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
+        h1 {
+            text-align: center;
             margin-bottom: 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            color: #2c3e50;
         }
 
         .cart-item {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            display: grid;
-            grid-template-columns: 100px 1fr auto;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        .cart-item img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 5px;
-            background: #ddd;
-        }
-
-        .item-info h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .item-info .price {
-            color: #e74c3c;
-            font-size: 1.1rem;
-            font-weight: bold;
-        }
-
-        .item-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            align-items: flex-end;
-        }
-
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .quantity-control input {
-            width: 60px;
-            padding: 0.5rem;
-            text-align: center;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .btn-remove {
-            padding: 0.5rem 1rem;
-            background: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .cart-summary {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .cart-summary h2 {
-            margin-bottom: 1rem;
-        }
-
-        .summary-row {
             display: flex;
             justify-content: space-between;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #eee;
+            align-items: center;
+            background: #fff;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        .summary-row.total {
-            font-size: 1.5rem;
+        .cart-item .info {
+            flex: 2;
+        }
+
+        .cart-item .quantity,
+        .cart-item .price {
+            flex: 1;
+            text-align: center;
+        }
+
+        .total {
+            text-align: right;
+            font-size: 1.2rem;
             font-weight: bold;
-            color: #e74c3c;
-            border-bottom: none;
             margin-top: 1rem;
+            color: #2c3e50;
         }
 
-        .btn {
-            display: inline-block;
-            padding: 1rem 2rem;
-            margin-top: 1rem;
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .buttons a,
+        .buttons button {
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            background: #2c3e50;
+            color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            text-decoration: none;
-            font-size: 1rem;
+            transition: 0.3s;
         }
 
-        .btn-success {
-            background: #27ae60;
-            color: white;
-        }
-
-        .btn-secondary {
-            background: #95a5a6;
-            color: white;
-            margin-left: 1rem;
+        .buttons a:hover,
+        .buttons button:hover {
+            background: #34495e;
         }
 
         .empty-cart {
             text-align: center;
-            padding: 3rem;
-            background: white;
+            background: #fff;
+            padding: 2rem;
             border-radius: 8px;
-        }
-
-        @media (max-width: 768px) {
-            .cart-item {
-                grid-template-columns: 1fr;
-            }
-            .item-actions {
-                align-items: flex-start;
-            }
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+            color: #7f8c8d;
         }
     </style>
 </head>
 <body>
+
+<!-- Navbar -->
 <div class="navbar">
     <h1>☕ Coffee Shop</h1>
     <div>
         <a th:href="@{/}">Home</a>
-        <a th:href="@{/products}">Products</a>
-        <a th:href="@{/cart/}">Cart</a>
+
+        <span sec:authorize="isAuthenticated()">
+            <a th:href="@{/cart/}">Cart</a>
+            <a th:href="@{/users/profile/}">Profile</a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard}">Dashboard</a>
+            <form th:action="@{/auth/logout}" method="post" style="display:inline;">
+                <button type="submit" style="background:none;border:none;color:white;cursor:pointer;">Logout</button>
+            </form>
+        </span>
+
+        <span sec:authorize="!isAuthenticated()">
+            <a th:href="@{/auth/login}">Login</a>
+            <a th:href="@{/auth/register}">Register</a>
+        </span>
     </div>
 </div>
 
 <div class="container">
-    <div class="cart-header">
-        <h1>🛒 Your Shopping Cart</h1>
+    <h1>Your Cart</h1>
+
+    <div th:if="${#lists.isEmpty(items)}" class="empty-cart">
+        <p>Your cart is empty.</p>
     </div>
 
-    <div th:if="${cartItems.isEmpty()}" class="empty-cart">
-        <h2>Your cart is empty</h2>
-        <p>Start shopping to add items to your cart!</p>
-        <a th:href="@{/products}" class="btn btn-success">Browse Products</a>
-    </div>
-
-    <div th:unless="${cartItems.isEmpty()}">
-        <div th:each="entry : ${cartItems}" class="cart-item" th:attr="data-id=${entry.key.id}">
-            <img th:if="${entry.key.imageUrl != null}"
-                 th:src="${entry.key.imageUrl}"
-                 th:alt="${entry.key.name}">
-            <img th:unless="${entry.key.imageUrl != null}"
-                 src="https://via.placeholder.com/100x100?text=No+Image"
-                 alt="No image">
-
-            <div class="item-info">
-                <h3 th:text="${entry.key.name}">Product Name</h3>
-                <p class="price" th:text="${'$' + entry.key.price + ' each'}">$0.00</p>
-                <p class="subtotal" th:text="${'$' + (entry.key.price * entry.value)}">Subtotal</p>
-            </div>
-
-            <div class="item-actions">
-                <div class="quantity-control">
-                    <input type="number"
-                           min="1"
-                           th:max="${entry.key.stock}"
-                           th:value="${entry.value}"
-                           class="quantity-input">
-                </div>
-                <form th:action="@{/cart/remove/{id}(id=${entry.key.id})}" method="post">
-                    <button type="submit" class="btn-remove">Remove</button>
-                </form>
-            </div>
+    <div th:each="item : ${items}" class="cart-item">
+        <div class="info">
+            <span th:text="${item.productName}">Product Name</span>
         </div>
-
-        <div class="cart-summary">
-            <h2>Order Summary</h2>
-            <div class="summary-row">
-                <span>Items:</span>
-                <span id="total-items" th:text="${cartItems.size()}">0</span>
-            </div>
-            <div class="summary-row total">
-                <span>Total:</span>
-                <span id="total-price" th:text="${'$' + total}">$0.00</span>
-            </div>
-
-            <a href="#" class="btn btn-success">Proceed to Checkout</a>
-            <a th:href="@{/products}" class="btn btn-secondary">Continue Shopping</a>
-
-            <form th:action="@{/cart/clear}" method="post" style="margin-top: 1rem;">
-                <button type="submit" class="btn btn-remove">Clear Cart</button>
-            </form>
+        <div class="quantity">
+            Quantity: <span th:text="${item.quantity}">1</span>
+        </div>
+        <div class="price">
+            $<span th:text="${item.unitPrice}">0.00</span>
         </div>
     </div>
+
+    <div class="total">
+        Total: $<span th:text="${total}">0.00</span>
+    </div>
+
+    <div class="buttons">
+        <!-- Продолжить покупки -->
+        <a th:href="@{/}">Continue Shopping</a>
+
+        <!-- Очистить корзину -->
+        <form th:action="@{/cart/clear}" method="post" style="margin:0;">
+            <button type="submit">Clear Cart</button>
+        </form>
+
+        <!-- Оформить заказ -->
+        <form th:action="@{/orders/checkout}" method="post" style="margin:0;">
+            <button type="submit" style="background:#27ae60;">Checkout</button>
+        </form>
+    </div>
+
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const inputs = document.querySelectorAll('.quantity-input');
-
-        inputs.forEach(input => {
-            input.addEventListener('change', function() {
-                const parent = this.closest('.cart-item');
-                const productId = parent.dataset.id;
-                const quantity = this.value;
-
-                fetch(`/cart/update/${productId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]')?.content || ''
-                    },
-                    body: `quantity=${quantity}`
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            parent.querySelector('.subtotal').textContent = '$' + data.subtotal.toFixed(2);
-                            document.getElementById('total-price').textContent = '$' + data.total.toFixed(2);
-                        } else {
-                            alert('Ошибка при обновлении корзины');
-                        }
-                    });
-            });
-        });
-    });
-</script>
 </body>
 </html>

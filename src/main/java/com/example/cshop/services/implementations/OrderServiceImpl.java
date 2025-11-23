@@ -55,50 +55,6 @@ public class OrderServiceImpl implements OrderService {
         return mapper.toDto(repository.save(order));
     }
 
-    @Transactional
-    @Override
-    public OrderDto createOrderFromCart(String username, Map<Long, Integer> cart) {
-        if (cart.isEmpty()) {
-            throw new RuntimeException("Cart is empty");
-        }
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        Order order = new Order();
-        order.setUser(user);
-        order.setOrderDate(LocalDateTime.now());
-        order.setStatus(OrderStatus.NEW);
-
-        BigDecimal total = BigDecimal.ZERO;
-        List<OrderItem> orderItems = new ArrayList<>();
-
-        for (Map.Entry<Long, Integer> entry : cart.entrySet()) {
-            Product product = productRepository.findById(entry.getKey())
-                    .orElseThrow(() -> new RuntimeException("Product not found: " + entry.getKey()));
-
-            Integer quantity = entry.getValue();
-
-            OrderItem item = new OrderItem();
-            item.setProduct(product);
-            item.setQuantity(quantity);
-            item.setPrice(product.getPrice());
-            item.setOrder(order);
-
-            orderItems.add(item);
-
-            total = total.add(product.getPrice().multiply(BigDecimal.valueOf(quantity)));
-        }
-
-        order.setItems(orderItems);
-        order.setTotal(total);
-
-        repository.save(order); // сохраняем заказ вместе с OrderItems через cascade
-
-        return mapper.toDto(order);
-    }
-
-
 
     @Override
     public OrderDto update(Long id, OrderUpdateDto dto) {
@@ -111,6 +67,48 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void delete(Long id) {
         repository.deleteById(id);
+    }
+
+
+    @Override
+    public OrderDto createOrderFromCart(String userEmail, Map<Long, Integer> cart) {
+        // Находим пользователя по email
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found: " + userEmail));
+
+        // Создаем новый заказ
+        Order order = new Order();
+        order.setUser(user);
+
+        BigDecimal total = BigDecimal.ZERO;
+
+        // Добавляем товары из корзины
+        for (Map.Entry<Long, Integer> entry : cart.entrySet()) {
+            Long productId = entry.getKey();
+            Integer quantity = entry.getValue();
+
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new RuntimeException("Product not found: " + productId));
+
+            // Создаем OrderItem
+            OrderItem orderItem = new OrderItem();
+            orderItem.setProduct(product);
+            orderItem.setQuantity(quantity);
+            orderItem.setUnitPrice(product.getPrice());
+            orderItem.setOrder(order);
+
+            order.getItems().add(orderItem);
+
+            // Считаем общую сумму
+            total = total.add(product.getPrice().multiply(BigDecimal.valueOf(quantity)));
+        }
+
+        order.setTotal(total);
+
+        // Сохраняем заказ
+        Order savedOrder = repository.save(order);
+
+        return mapper.toDto(savedOrder);
     }
 
     @Override

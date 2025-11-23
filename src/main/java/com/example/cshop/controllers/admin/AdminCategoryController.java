@@ -40,7 +40,7 @@ public class AdminCategoryController {
             return "admin/categories/category-create";
         }
         categoryService.create(dto);
-        return "redirect:/admin/categories/read";
+        return "redirect:/admin/categories/";
     }
 
     @GetMapping("/edit/{id}")

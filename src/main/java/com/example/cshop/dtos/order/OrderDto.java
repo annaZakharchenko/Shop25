@@ -12,6 +12,8 @@ public class OrderDto {
     private Long id;
     private LocalDateTime orderDate;
     private Long userId;
+    private String userEmail;      // ← НОВОЕ ПОЛЕ
+    private String username;
     private OrderStatus status;
     private BigDecimal total;
     private List<OrderItemDto> items;
@@ -26,6 +28,22 @@ public class OrderDto {
 
     public Long getUserId() { return userId; }
     public void setUserId(Long userId) { this.userId = userId; }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public OrderStatus getStatus() { return status; }
     public void setStatus(OrderStatus status) { this.status = status; }

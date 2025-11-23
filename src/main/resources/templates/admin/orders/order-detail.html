@@ -16,41 +16,44 @@
             justify-content: space-between;
             align-items: center;
         }
-        .navbar h1 { font-size: 1.5rem; }
-        .navbar a { color: white; text-decoration: none; margin: 0 1rem; }
+        .navbar a { color: white; text-decoration: none; margin-left: 1rem; }
 
-        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
 
-        .order-header {
+        .page-header {
             background: white;
             padding: 2rem;
             border-radius: 8px;
-            margin-bottom: 2rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
         }
 
-        .order-header h1 {
-            font-size: 2rem;
+        .page-header h1 {
             color: #2c3e50;
+            font-size: 2rem;
             margin-bottom: 1rem;
         }
 
-        .order-info {
+        .order-info-grid {
             display: grid;
-            grid-template-columns: 150px 1fr;
-            gap: 1rem;
+            grid-template-columns: 200px auto;
+            row-gap: 0.8rem;
+            column-gap: 1rem;
+            font-size: 1rem;
         }
 
-        .order-info .label {
-            font-weight: bold;
-            color: #666;
-        }
+        .label { font-weight: bold; color: #2c3e50; }
 
         .status-badge {
-            padding: 0.5rem 1rem;
+            padding: 0.4rem 0.8rem;
             border-radius: 5px;
             font-weight: bold;
             display: inline-block;
+            font-size: 0.9rem;
         }
 
         .status-NEW { background: #3498db; color: white; }
@@ -61,178 +64,189 @@
 
         .status-update {
             background: white;
-            padding: 2rem;
-            border-radius: 8px;
+            padding: 1.5rem;
             margin-bottom: 2rem;
+            border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .status-update h2 {
-            margin-bottom: 1rem;
-            color: #2c3e50;
-        }
-
-        .status-update form {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
         .status-update select {
-            flex: 1;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
+            padding: 0.5rem;
             border-radius: 5px;
-            font-size: 1rem;
+            width: 200px;
         }
 
         .status-update button {
-            padding: 0.75rem 2rem;
-            background: #27ae60;
+            padding: 0.5rem 1rem;
+            background: #3498db;
             color: white;
             border: none;
             border-radius: 5px;
+            margin-left: 0.5rem;
             cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .status-update button:hover {
-            background: #229954;
         }
 
         .order-items {
             background: white;
-            padding: 2rem;
+            padding: 1.5rem;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .order-items h2 {
-            margin-bottom: 1.5rem;
-            color: #2c3e50;
+        .item-card {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
         }
 
-        .item-card {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 1rem;
-            align-items: center;
+        .item-card:last-child {
+            border-bottom: none;
         }
 
         .item-name {
-            font-weight: bold;
             font-size: 1.1rem;
+            font-weight: bold;
+            color: #2c3e50;
         }
 
         .item-details {
-            color: #666;
-            margin-top: 0.5rem;
+            color: #555;
+            margin-top: 0.3rem;
         }
 
         .item-price {
-            text-align: right;
-            font-size: 1.1rem;
             font-weight: bold;
             color: #e74c3c;
+            font-size: 1.1rem;
         }
 
         .order-total {
-            margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 2px solid #2c3e50;
-            display: flex;
-            justify-content: space-between;
+            text-align: right;
+            margin-top: 1.5rem;
             font-size: 1.5rem;
             font-weight: bold;
-            color: #2c3e50;
         }
 
         .back-btn {
             display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background: #95a5a6;
+            margin-top: 1rem;
+            padding: 0.7rem 1.2rem;
+            background: #34495e;
             color: white;
             text-decoration: none;
             border-radius: 5px;
-            margin-top: 2rem;
         }
 
         .back-btn:hover {
-            background: #7f8c8d;
+            background: #2c3e50;
         }
     </style>
 </head>
+
 <body>
 <div class="navbar">
     <h1>🔧 Admin - Order Details</h1>
     <div>
-        <a th:href="@{/templates/admin}">Dashboard</a>
-        <a th:href="@{/templates/admin/orders}">Orders</a>
+        <a th:href="@{/admin/dashboard}">Dashboard</a>
+        <a th:href="@{/orders/}">Orders</a>
+        <a th:href="@{/}">Home</a>
     </div>
 </div>
 
 <div class="container">
-    <div class="order-header">
+
+    <!-- HEADER -->
+    <div class="page-header">
         <h1 th:text="${'Order #' + order.id}">Order #1</h1>
-        <div class="order-info">
+
+        <div class="order-info-grid">
             <div class="label">Order Date:</div>
-            <div th:text="${#temporals.format(order.orderDate, 'dd MMMM yyyy HH:mm')}">Date</div>
+            <div th:text="${#temporals.format(order.orderDate, 'dd MMM yyyy HH:mm')}"></div>
 
-            <div class="label">Customer ID:</div>
-            <div th:text="${order.userId}">User ID</div>
+            <div class="label">Customer Name:</div>
+            <div th:text="${order.username}"></div>
 
-            <div class="label">Current Status:</div>
+            <div class="label">Email:</div>
+            <div th:text="${order.userEmail}"></div>
+
+            <div class="label">User ID:</div>
+            <div th:text="${order.userId}"></div>
+
+            <div class="label">Status:</div>
             <div>
-                    <span class="status-badge"
-                          th:classappend="${'status-' + order.status}"
-                          th:text="${order.status}">Status</span>
+                <span class="status-badge"
+                      th:classappend="${'status-' + order.status}"
+                      th:text="${order.status}"></span>
             </div>
 
             <div class="label">Total Amount:</div>
-            <div th:text="${'$' + order.total}" style="font-size: 1.3rem; font-weight: bold; color: #e74c3c;">Total</div>
+            <div style="color:#e74c3c; font-size:1.3rem; font-weight:bold;"
+                 th:text="${'$' + order.total}"></div>
         </div>
     </div>
 
+    <!-- UPDATE STATUS BOX -->
     <div class="status-update">
         <h2>🔄 Update Order Status</h2>
-        <form th:action="@{/admin/orders/{id}/update-status(id=${order.id})}" method="post">
-            <select name="status" required>
-                <option value="">-- Select New Status --</option>
-                <option value="NEW" th:selected="${order.status == T(com.example.cshop.models.OrderStatus).NEW}">NEW</option>
-                <option value="PROCESSING" th:selected="${order.status == T(com.example.cshop.models.OrderStatus).PROCESSING}">PROCESSING</option>
-                <option value="SHIPPED" th:selected="${order.status == T(com.example.cshop.models.OrderStatus).SHIPPED}">SHIPPED</option>
-                <option value="DELIVERED" th:selected="${order.status == T(com.example.cshop.models.OrderStatus).DELIVERED}">DELIVERED</option>
-                <option value="CANCELLED" th:selected="${order.status == T(com.example.cshop.models.OrderStatus).CANCELLED}">CANCELLED</option>
-            </select>
-            <button type="submit">Update Status</button>
-        </form>
+
+        <select id="status-select" required>
+            <option value="">-- Select New Status --</option>
+            <option value="NEW" th:selected="${order.status.name() == 'NEW'}">NEW</option>
+            <option value="PROCESSING" th:selected="${order.status.name() == 'PROCESSING'}">PROCESSING</option>
+            <option value="SHIPPED" th:selected="${order.status.name() == 'SHIPPED'}">SHIPPED</option>
+            <option value="DELIVERED" th:selected="${order.status.name() == 'DELIVERED'}">DELIVERED</option>
+            <option value="CANCELLED" th:selected="${order.status.name() == 'CANCELLED'}">CANCELLED</option>
+        </select>
+
+        <button onclick="updateStatus()">Update Status</button>
     </div>
 
-    <div class="order-items">
-        <h2>📦 Order Items</h2>
+    <script>
+        function updateStatus() {
+            const status = document.getElementById('status-select').value;
 
-        <div th:each="item : ${order.items}" class="item-card">
+            fetch('/admin/orders/' + [[${order.id}]] + '/update-status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'status=' + status
+            })
+                .then(r => r.text())
+                .then(() => {
+                    // Обновляем UI без перезагрузки
+                    const badge = document.querySelector('.status-badge');
+                    badge.textContent = status;
+                    badge.className = 'status-badge status-' + status;
+                    alert("Статус обновлён!");
+                });
+        }
+    </script>
+
+
+    <!-- ORDER ITEMS -->
+    <div class="order-items">
+        <h2 style="margin-bottom:1rem;">Order Items</h2>
+
+        <div class="item-card" th:each="item : ${order.items}">
             <div>
-                <div class="item-name" th:text="${item.productName}">Product Name</div>
+                <div class="item-name" th:text="${item.productName}">Product</div>
                 <div class="item-details">
-                    Quantity: <span th:text="${item.quantity}">1</span> ×
-                    $<span th:text="${item.unitPrice}">0.00</span>
+                    Qty: <span th:text="${item.quantity}"></span> ×
+                    $<span th:text="${item.unitPrice}"></span>
                 </div>
             </div>
-            <div class="item-price" th:text="${'$' + (item.quantity * item.unitPrice)}">$0.00</div>
+
+            <div class="item-price"
+                 th:text="${'$' + (item.unitPrice * item.quantity)}">$0.00</div>
         </div>
 
         <div class="order-total">
-            <span>TOTAL:</span>
-            <span th:text="${'$' + order.total}">$0.00</span>
+            TOTAL: <span th:text="${'$' + order.total}">$0.00</span>
         </div>
     </div>
 
-    <a th:href="@{/templates/admin/orders}" class="back-btn">← Back to Orders</a>
+    <a class="back-btn" onclick="history.back();" >← Back to Orders</a>
+
 </div>
 </body>
 </html>

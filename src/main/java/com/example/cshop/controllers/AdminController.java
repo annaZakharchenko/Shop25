@@ -1,7 +1,9 @@
 package com.example.cshop.controllers;
 
 import com.example.cshop.dtos.category.CategoryCreateDto;
+import com.example.cshop.dtos.order.OrderUpdateDto;
 import com.example.cshop.dtos.product.ProductCreateDto;
+import com.example.cshop.models.OrderStatus;
 import com.example.cshop.services.interfaces.CategoryService;
 import com.example.cshop.services.interfaces.OrderService;
 import com.example.cshop.services.interfaces.ProductService;
@@ -53,16 +55,18 @@ public class AdminController {
     @GetMapping("/orders/{id}")
     public String orderDetail(@PathVariable Long id, Model model) {
         model.addAttribute("order", orderService.findById(id));
-        return "admin/order-detail";
+        return "admin/orders/order-detail";
     }
 
     @PostMapping("/orders/{id}/update-status")
+    @ResponseBody
     public String updateOrderStatus(@PathVariable Long id,
                                     @RequestParam("status") String status) {
-        var order = orderService.findById(id);
-        var updateDto = new com.example.cshop.dtos.order.OrderUpdateDto();
-        updateDto.setStatus(com.example.cshop.models.OrderStatus.valueOf(status));
+        var updateDto = new OrderUpdateDto();
+        updateDto.setStatus(OrderStatus.valueOf(status));
+
         orderService.update(id, updateDto);
-        return "redirect:/admin/orders/" + id;
+
+        return "OK";
     }
 }
