@@ -4,6 +4,7 @@ import com.example.cshop.dtos.category.CategoryDto;
 import com.example.cshop.dtos.product.ProductDto;
 import com.example.cshop.services.interfaces.CategoryService;
 import com.example.cshop.services.interfaces.ProductService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class HomeController {
@@ -26,7 +28,8 @@ public class HomeController {
     @GetMapping({"/", "/home"})
     public String home(@RequestParam(required = false) Long categoryId,
                        Model model,
-                       Authentication authentication) {
+                       Authentication authentication,
+                       HttpSession session) {  // <-- добавляем HttpSession
 
         // --- Продукты ---
         List<ProductDto> products;
@@ -41,10 +44,21 @@ public class HomeController {
         // --- Категории ---
         List<CategoryDto> categories = categoryService.findAll();
 
+        // --- Подсчет количества товаров в корзине ---
+        @SuppressWarnings("unchecked")
+        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
+        int cartItemCount = 0;
+        if (cart != null) {
+            for (Integer qty : cart.values()) {
+                cartItemCount += qty;
+            }
+        }
+
         // --- Добавляем атрибуты для Thymeleaf ---
         model.addAttribute("products", products);
         model.addAttribute("categories", categories);
-        model.addAttribute("category", selectedCategory); // может быть null
+        model.addAttribute("category", selectedCategory);
+        model.addAttribute("cartItemCount", cartItemCount); // <-- новый атрибут
 
         // --- Проверка авторизации ---
         if (authentication != null && authentication.isAuthenticated()) {
@@ -59,4 +73,5 @@ public class HomeController {
 
         return "home";
     }
+
 }

@@ -54,10 +54,11 @@ public class CartController {
         return "user/cart"; // путь к твоему Thymeleaf шаблону
     }
 
-    @PostMapping("/add/{productId}")
-    public String addToCart(@PathVariable Long productId,
-                            @RequestParam(defaultValue = "1") int quantity,
-                            HttpSession session) {
+    @PostMapping("/add-ajax/{productId}")
+    @ResponseBody
+    public Map<String, Object> addToCartAjax(@PathVariable Long productId,
+                                             @RequestParam(defaultValue = "1") int quantity,
+                                             HttpSession session) {
         @SuppressWarnings("unchecked")
         Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
 
@@ -65,12 +66,26 @@ public class CartController {
             cart = new HashMap<>();
         }
 
-        // Добавляем количество
         cart.put(productId, cart.getOrDefault(productId, 0) + quantity);
         session.setAttribute("cart", cart);
 
-        return "redirect:/";
+        // Возвращаем количество товаров и общую сумму
+        BigDecimal total = BigDecimal.ZERO;
+        int itemCount = 0;
+        for (Map.Entry<Long, Integer> entry : cart.entrySet()) {
+            ProductDto p = productService.findById(entry.getKey());
+            total = total.add(p.getPrice().multiply(BigDecimal.valueOf(entry.getValue())));
+            itemCount += entry.getValue();
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", true);
+        result.put("total", total);
+        result.put("itemCount", itemCount);
+
+        return result;
     }
+
 
 
     @PostMapping("/remove/{productId}")
