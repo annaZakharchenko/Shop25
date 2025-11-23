@@ -63,8 +63,22 @@ public class OrderController {
         // Очистка корзины
         session.removeAttribute("cart");
 
-        return "redirect:/user/profile/"; // редирект на страницу заказов пользователя
+        return "redirect:/users/profile/"; // редирект на страницу заказов пользователя
     }
+    @GetMapping("/{id}")
+    public String getOrderDetails(@PathVariable Long id, Model model, Authentication authentication) {
+        OrderDto order = orderService.findById(id);
+
+        // Проверка: пользователь не должен увидеть чужой заказ
+        String email = authentication.getName();
+        if (!order.getUserEmail().equals(email)) {
+            return "redirect:/users/profile/?error=forbidden";
+        }
+
+        model.addAttribute("order", order);
+        return "user/myorder";
+    }
+
 
 
 

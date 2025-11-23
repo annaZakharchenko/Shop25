@@ -1,75 +1,132 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
-    <title>Profile - Coffee Shop</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>My Profile - Coffee Shop</title>
+
     <style>
-        body { font-family: Arial, sans-serif; background: #f5f5f5; margin:0; padding:0; }
-        .container { display: flex; max-width: 1200px; margin: 2rem auto; gap: 2rem; }
-        .profile-info, .orders { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .profile-info { flex: 1; min-width: 250px; }
-        .orders { flex: 2; }
-        h2 { margin-bottom: 1rem; }
-        .order-card { border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem; border-radius: 5px; }
-        .order-card h3 { margin-bottom: 0.5rem; }
-        .order-items { margin-left: 1rem; }
-        .order-item { font-size: 0.9rem; margin-bottom: 0.25rem; }
-        .navbar { background: #2c3e50; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-        .navbar a { color: white; text-decoration: none; margin: 0 0.5rem; }
-        .navbar a:hover { text-decoration: underline; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f3f0;
+            margin: 0;
+            padding: 0;
+        }
+        nav {
+            background-color: #6f4e37;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav a {
+            color: #fff;
+            margin-left: 15px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            width: 80%;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .section-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 5px;
+        }
+        .profile-block, .orders-block {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table th, table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        table th {
+            background-color: #e8e4e1;
+        }
+        .status {
+            font-weight: bold;
+        }
     </style>
 </head>
+
 <body>
 
-<!-- Navbar -->
-<div class="navbar">
-    <h1>☕ Coffee Shop</h1>
+<!-- NAVBAR -->
+<nav>
     <div>
-        <a th:href="@{/}">Home</a>
+        <a href="/">Home</a>
+        <a href="/cart/">Cart</a>
+        <a sec:authorize="hasRole('ADMIN')"
+           th:href="@{/admin/dashboard}"> Dashboard
+        </a>
 
-        <span sec:authorize="isAuthenticated()">
-            <a th:href="@{/cart/}">Cart</a>
-            <a th:href="@{/users/profile}">Profile</a>
-            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard}">Dashboard</a>
-            <form th:action="@{/auth/logout}" method="post" style="display:inline;">
-                <button type="submit" style="background:none;border:none;color:white;cursor:pointer;">Logout</button>
-            </form>
-        </span>
-
-        <span sec:authorize="!isAuthenticated()">
-            <a th:href="@{/auth/login}">Login</a>
-            <a th:href="@{/auth/register}">Register</a>
-        </span>
     </div>
-</div>
+    <div>
+        <span th:text="${username}"></span>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
 
 <div class="container">
-    <div class="profile-info">
-        <h2>Profile Information</h2>
-        <p><strong>Username:</strong> <span th:text="${user.username}">username</span></p>
-        <p><strong>Email:</strong> <span th:text="${user.email}">email@example.com</span></p>
+
+    <!-- USER PROFILE SECTION -->
+    <div class="profile-block">
+        <h2 class="section-title">My Profile</h2>
+
+        <p><strong>Name:</strong> <span th:text="${user.username}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+        <p><strong>Role:</strong> <span th:text="${user.roles}"></span></p>
     </div>
 
-    <div class="orders">
-        <h2>Your Orders</h2>
-        <div th:if="${#lists.isEmpty(orders)}">
-            <p>You have no orders yet.</p>
-        </div>
+    <!-- ORDERS SECTION -->
+    <div class="orders-block">
+        <h2 class="section-title">My Orders</h2>
 
-        <div th:each="order : ${orders}" class="order-card">
-            <h3>Order #<span th:text="${order.id}">1</span> - <span th:text="${order.status}">NEW</span></h3>
-            <p><strong>Date:</strong> <span th:text="${#temporals.format(order.orderDate, 'dd-MM-yyyy HH:mm')}">01-01-2025 12:00</span></p>
-            <p><strong>Total:</strong> $<span th:text="${order.total}">0.00</span></p>
-            <div class="order-items">
-                <h4>Items:</h4>
-                <div th:each="item : ${order.items}" class="order-item">
-                    <span th:text="${item.productName}">Product Name</span> - Quantity: <span th:text="${item.quantity}">1</span> - Price: $<span th:text="${item.price}">0.00</span>
-                </div>
-            </div>
-        </div>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Total (€)</th>
+                <th>Status</th>
+                <th>Details</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.id}"></td>
+                <td th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy HH:mm')}"></td>
+                <td th:text="${order.total}"></td>
+                <td class="status" th:text="${order.status}"></td>
+                <td>
+                    <a th:href="@{/orders/{id}(id=${order.id})}">View</a>
+                </td>
+            </tr>
+
+            <tr th:if="${orders.size() == 0}">
+                <td colspan="5" style="text-align: center; padding: 15px;">
+                    You have no orders yet.
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
+
 </div>
 
 </body>

@@ -40,9 +40,17 @@ public class AdminUserController {
     // Просмотр информации о пользователе
     @GetMapping("/details/{id}")
     public String userDetails(@PathVariable Long id, Model model) {
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + id));
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + id));
+
         model.addAttribute("user", user);
+
+        // 👉 Добавляем заказы
+        model.addAttribute("orders", user.getOrders());
+
         return "admin/user-details";
     }
+
 }
 

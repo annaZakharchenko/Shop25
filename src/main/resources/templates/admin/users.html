@@ -54,7 +54,7 @@
             <td th:text="${u.username}"></td>
             <td th:text="${u.email}"></td>
             <td>
-                <a th:href="@{'/admin/users/details/' + ${u.id}}" class="btn btn-info">View</a>
+                <a th:href="@{'/admin/users/details/' + ${u.id}}" class="btn btn-primary">View</a>
                 <form th:action="@{'/admin/users/delete/' + ${u.id}}" method="post" style="display:inline;">
                     <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
                 </form>

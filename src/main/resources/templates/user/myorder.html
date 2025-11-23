@@ -2,42 +2,49 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>My Orders - Coffee Shop</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Order Details</title>
+    <style>
+        body { font-family: Arial; background: #f5f3f0; padding: 20px; }
+        .box { background: #fff; padding: 20px; border-radius: 8px; width: 70%; margin: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 10px; border-bottom: 1px solid #ddd; }
+        th { background: #eee; }
+    </style>
 </head>
+
 <body>
-<div class="navbar">
-    <h1>☕ Coffee Shop</h1>
-    <div>
-        <a th:href="@{/}">Home</a>
-        <a th:href="@{/products}">Products</a>
-        <a th:href="@{/cart}">Cart</a>
-        <a th:href="@{/user/orders}">My Orders</a>
-    </div>
+
+<div class="box">
+    <h2>Order #<span th:text="${order.id}"></span></h2>
+
+    <p><strong>Date:</strong> <span th:text="${#dates.format(order.orderDate, 'dd.MM.yyyy HH:mm')}"></span></p>
+    <p><strong>Total:</strong> €<span th:text="${order.total}"></span></p>
+    <p><strong>Status:</strong> <span th:text="${order.status}"></span></p>
+
+    <h3>Items:</h3>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Price (€)</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="item : ${order.items}">
+            <td th:text="${item.productName}"></td>
+            <td th:text="${item.quantity}"></td>
+            <td th:text="${item.unitPrice}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <a th:href="@{/users/profile/}">← Back to Profile</a>
+
 </div>
 
-<div class="container">
-    <h1>📦 My Orders</h1>
-
-    <div th:if="${orders.isEmpty()}">
-        <p>You have no orders yet.</p>
-        <a th:href="@{/products}" class="btn btn-success">Start Shopping</a>
-    </div>
-
-    <div th:each="order : ${orders}" style="margin-bottom: 2rem; border: 1px solid #ddd; padding: 1rem; border-radius: 5px;">
-        <h3>Order #<span th:text="${order.id}">1</span></h3>
-        <p>Date: <span th:text="${#dates.format(order.createdAt, 'dd-MM-yyyy HH:mm')}">01-01-2025</span></p>
-        <p>Total: $<span th:text="${order.total}">0.00</span></p>
-
-        <div th:each="item : ${order.items}">
-            <p>
-                <span th:text="${item.product.name}">Product Name</span> -
-                Quantity: <span th:text="${item.quantity}">1</span> -
-                Price: $<span th:text="${item.product.price}">0.00</span>
-            </p>
-        </div>
-
-    </div>
-</div>
 </body>
 </html>
