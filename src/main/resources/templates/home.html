@@ -144,17 +144,30 @@
                         </div>
 
                         <div class="product-actions">
+
+                            <!-- Details button for everyone -->
                             <a th:href="@{/products/detail/{id}(id=${product.id})}"
                                class="btn btn-secondary">
                                 View Details
                             </a>
+
+                            <!-- Button for authenticated users -->
                             <button class="btn btn-primary add-to-cart-btn"
+                                    sec:authorize="isAuthenticated()"
                                     th:data-id="${product.id}"
                                     th:data-quantity="1"
                                     th:disabled="${product.stock == 0}">
-                                 Buy
+                                Buy
+                            </button>
+
+                            <!-- Button for guests (shows login notification) -->
+                            <button class="btn btn-primary guest-buy-btn"
+                                    sec:authorize="!isAuthenticated()">
+                                Buy
                             </button>
                         </div>
+
+
                     </div>
                 </article>
             </div>
@@ -226,6 +239,15 @@
             });
         });
 
+        const guestButtons = document.querySelectorAll('.guest-buy-btn');
+        guestButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                showNotification('Please login or create an account to buy products.', 'error');
+            });
+        });
+
+
+
         function showNotification(message, type) {
             const notification = document.createElement('div');
             notification.className = `notification notification-${type}`;
@@ -243,6 +265,8 @@
                 }, 300);
             }, 3000);
         }
+
+
     });
 </script>
 

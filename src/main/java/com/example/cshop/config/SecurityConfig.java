@@ -26,7 +26,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         // Публичные страницы
-                        .requestMatchers("/", "/home", "/auth/**", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/", "/home", "/auth/**", "/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/products", "/products/detail/**", "/products/by-category/**").permitAll()
                         .requestMatchers("/categories").permitAll()
 
