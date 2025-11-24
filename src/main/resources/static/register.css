@@ -1,0 +1,143 @@
+/* === BASE === */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f8eed5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* === REGISTER CARD === */
+.login-card {
+    background: white;
+    padding: 2rem 2.5rem;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(41,14,7,0.08);
+    width: 100%;
+    max-width: 400px;
+    text-align: left; /* теперь текст слева */
+}
+
+.login-card h2 {
+    font-size: 1.5rem;
+    color: #290E07;
+    margin-bottom: 0.5rem;
+    text-align: center; /* заголовок по центру */
+}
+
+.login-card p {
+    color: #3F2A2B;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    text-align: center; /* описание по центру */
+}
+
+/* === INFO BOX VERTICAL LEFT-ALIGNED === */
+.info-box {
+    background: #e3d0d8; /* светлый фон */
+    border-left: 4px solid #290E07; /* цвет полоски слева */
+    padding: 0.8rem 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 5px;
+}
+
+.info-box strong {
+    color: #290E07;
+    display: block; /* чтобы заголовок был на отдельной строке */
+    margin-bottom: 0.3rem;
+    font-size: 0.95rem;
+}
+
+.info-box p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #3F2A2B;
+    line-height: 1.2;
+}
+
+
+
+/* === FORM === */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form > div {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+    color: #290E07;
+    font-size: 0.85rem;
+}
+
+input {
+    width: 100%;
+    padding: 0.65rem 0.75rem;
+    border: 1.5px solid #E3D0D8;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    outline: none;
+    border-color: #290E07;
+}
+
+/* === ERROR MESSAGE === */
+.error-message {
+    background: #fee;
+    color: #c33;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border-left: 4px solid #c33;
+    font-size: 0.85rem;
+}
+
+/* === BUTTON === */
+button {
+    width: 100%;
+    padding: 0.8rem;
+    background: linear-gradient(135deg, #290E07 0%, #3F2A2B 100%);
+    color: #F6F5AE;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s;
+    margin-top: 0.5rem;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(41,14,7,0.2);
+}
+
+/* === FOOTER LINKS === */
+form > p {
+    text-align: center;
+    margin-top: 1rem;
+    color: #3F2A2B;
+    font-size: 0.85rem;
+}
+
+form > p a {
+    color: #290E07;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+form > p a:hover {
+    text-decoration: underline;
+}
