@@ -51,6 +51,10 @@ public class CartController {
         model.addAttribute("items", items);
         model.addAttribute("total", total);
 
+        int count = 0;
+        for (int q : cart.values()) count += q;
+        model.addAttribute("cartItemCount", count);
+
         return "user/cart"; // путь к твоему Thymeleaf шаблону
     }
 

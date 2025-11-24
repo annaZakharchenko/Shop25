@@ -53,17 +53,23 @@ public class UserController {
         model.addAttribute("orders", orders);
         return "user/my-profile";
     }
+
     @GetMapping("/profile/")
-    public String profilePage(Model model, Authentication authentication) {
-        String email = authentication.getName();
-        UserDto user = userService.findByEmail(email);
-        List<OrderDto> orders = orderService.getOrdersForUserByEmail(email);
+    public String profilePage(@RequestParam(value = "edit", required = false) Boolean edit,
+                              Model model, Authentication authentication) {
+
+        UserDto user = userService.findByEmail(authentication.getName());
+        List<OrderDto> orders = orderService.getOrdersForUserByEmail(authentication.getName());
 
         model.addAttribute("user", user);
         model.addAttribute("orders", orders);
+        model.addAttribute("editMode", edit != null && edit);
 
-        return "user/my-profile"; // имя файла без .html
+        return "user/my-profile";
     }
+
+
+
 
 
     @PostMapping("/create")
@@ -87,14 +93,30 @@ public class UserController {
         return "user/edit";
     }
 
-    @PostMapping("/edit/{id}")
-    public String updateUser(@PathVariable Long id,
-                             @ModelAttribute("user") @Valid UserUpdateDto dto,
-                             BindingResult bindingResult) {
+    @PostMapping("/profile/update")
+    public String updateProfile(@ModelAttribute("user") @Valid UserUpdateDto dto,
+                                BindingResult bindingResult,
+                                Authentication auth,
+                                Model model) {
+
         if (bindingResult.hasErrors()) {
-            return "user/edit";
+            // снова загрузить заказы + юзера
+            String email = auth.getName();
+            UserDto user = userService.findByEmail(email);
+            List<OrderDto> orders = orderService.getOrdersForUserByEmail(email);
+
+            model.addAttribute("user", user);
+            model.addAttribute("orders", orders);
+            model.addAttribute("editMode", true); // показать форму
+
+            return "user/my-profile";
         }
-        userService.update(id, dto);
-        return "redirect:/users";
+
+        // обновляем данные
+        UserDto current = userService.findByEmail(auth.getName());
+        userService.update(current.getId(), dto);
+
+        return "redirect:/users/profile/";
     }
+
 }

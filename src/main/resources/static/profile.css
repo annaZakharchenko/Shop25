@@ -1,0 +1,163 @@
+/* profile.css — стили только для страницы профиля.
+   Остальное берётся из main.css */
+
+/* Layout */
+.profile-main {
+    padding: 2.5rem 0;
+}
+
+/* Grid: левый профиль (узкий) — правый orders (шире) */
+.profile-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* Profile card */
+.profile-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.2rem;
+    box-shadow: 0 6px 18px rgba(41,14,7,0.08);
+}
+
+.profile-card h2 {
+    font-size: 1.1rem;
+    color: #290E07;
+    margin-bottom: 1rem;
+}
+
+.profile-info p {
+    margin: 0.45rem 0;
+    color: #3F2A2B;
+    font-size: 0.95rem;
+}
+
+.profile-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.6rem;
+}
+
+.profile-actions .btn {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.9rem;
+}
+
+/* Orders card / table */
+.orders-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.2rem;
+    box-shadow: 0 6px 18px rgba(41,14,7,0.08);
+}
+
+.orders-card h2 {
+    font-size: 1.1rem;
+    color: #290E07;
+    margin-bottom: 0.8rem;
+}
+
+/* Table wrapper to allow horizontal scroll on small screens */
+.orders-table-wrap {
+    overflow-x: auto;
+}
+
+/* Table */
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.orders-table thead th {
+    text-align: left;
+    padding: 0.7rem 0.8rem;
+    background: #F6F5AE; /* мягкий заголовок */
+    color: #290E07;
+    font-weight: 700;
+    border-bottom: 1px solid #E3D0D8;
+}
+
+.orders-table tbody td {
+    padding: 0.65rem 0.8rem;
+    border-bottom: 1px solid #f1e9df;
+    color: #3F2A2B;
+    vertical-align: middle;
+}
+
+/* Статусы */
+.status {
+    font-weight: 700;
+}
+
+
+
+/* View link */
+.view-link {
+    background: #3F2A2B;
+    color: #F6F5AE;
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: all 0.15s;
+}
+
+.view-link:hover {
+    transform: translateY(-2px);
+}
+
+/* Edit Profile Form */
+.edit-profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.cancel-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: #777;
+    color: #fff;
+    border-radius: 8px;
+    text-align: center;
+}
+
+
+/* Empty orders */
+.empty-orders {
+    padding: 1rem;
+    text-align: center;
+    color: #7f8c8d;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-card {
+        order: 1;
+    }
+    .orders-card {
+        order: 2;
+        margin-top: 0.8rem;
+    }
+}
