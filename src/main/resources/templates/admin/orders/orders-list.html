@@ -3,154 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <title>Manage Orders - Admin</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #f5f5f5; }
 
-        .navbar {
-            background: #e74c3c;
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .navbar h1 { font-size: 1.5rem; }
-        .navbar a { color: white; text-decoration: none; margin: 0 1rem; }
+    <!-- GLOBAL -->
+    <link rel="stylesheet" th:href="@{/admin/navbar.css}">
 
-        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+    <!-- PAGE-SPECIFIC -->
+    <link rel="stylesheet" th:href="@{/admin/categorylist.css}">
+    <link rel="stylesheet" th:href="@{/admin/orderlist.css}">
 
-        .page-header {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .page-header h1 {
-            font-size: 2rem;
-            color: #2c3e50;
-        }
-
-        .orders-table {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        thead {
-            background: #34495e;
-            color: white;
-        }
-
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-
-        tr:hover {
-            background: #f8f9fa;
-        }
-
-        .status-badge {
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            display: inline-block;
-        }
-
-        .status-NEW { background: #3498db; color: white; }
-        .status-PROCESSING { background: #f39c12; color: white; }
-        .status-SHIPPED { background: #9b59b6; color: white; }
-        .status-DELIVERED { background: #27ae60; color: white; }
-        .status-CANCELLED { background: #e74c3c; color: white; }
-
-        .btn {
-            padding: 0.5rem 1rem;
-            background: #3498db;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 0.9rem;
-            display: inline-block;
-        }
-
-        .btn:hover {
-            background: #2980b9;
-        }
-
-        .no-orders {
-            text-align: center;
-            padding: 3rem;
-            color: #666;
-        }
-    </style>
 </head>
+
 <body>
-<div class="navbar">
-    <h1>🔧 Admin - Orders</h1>
-    <div>
-        <a th:href="@{/admin/dashboard}">Dashboard</a>
-        <a th:href="@{/}">Home</a>
+<!-- Notifications -->
+<div th:if="${success}" class="notification notification-success" th:text="${success}"></div>
+<div th:if="${error}" class="notification notification-error" th:text="${error}"></div>
+
+<header class="site-header">
+    <div class="brand-container">
+        <div class="brand">
+            <span class="brand-icon">☕</span>
+            <span class="brand-name">Mocha Dreams - Admin Dashboard</span>
+            <span class="brand-tagline">Premium Coffee Experience</span>
+        </div>
     </div>
-</div>
+</header>
+
+<nav class="main-nav">
+    <div class="nav-container">
+        <div class="nav-links-left">
+            <a th:href="@{/admin/dashboard}" class="nav-link">Dashboard</a>
+            <a th:href="@{/admin/categories/}" class="nav-link">Categories</a>
+            <a th:href="@{/admin/products/}" class="nav-link">Products</a>
+            <a th:href="@{/orders/}" class="nav-link active">Orders</a>
+            <a th:href="@{/admin/users/}" class="nav-link">Users</a>
+        </div>
+
+        <div class="nav-links-right">
+            <form th:action="@{/auth/logout}" method="post">
+                <button class="logout-btn">Logout</button>
+            </form>
+        </div>
+    </div>
+</nav>
 
 <div class="container">
+
     <div class="page-header">
         <h1>📋 All Orders</h1>
     </div>
 
-    <div th:if="${orders.isEmpty()}" class="orders-table">
-        <div class="no-orders">
-            <h2>No orders yet</h2>
-            <p>Orders will appear here once customers start placing them.</p>
-        </div>
+    <!-- Empty State -->
+    <div th:if="${orders.isEmpty()}" class="no-orders">
+        <h3>No orders yet</h3>
+        <p>Orders will appear here once customers start placing them.</p>
     </div>
 
-    <div th:unless="${orders.isEmpty()}" class="orders-table">
-        <table>
-            <thead>
-            <tr>
-                <th>Order ID</th>
-                <th>Customer Email</th>
-                <th>Customer Name</th>
-                <th>Date</th>
-                <th>Items</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="order : ${orders}">
-                <td th:text="${'#' + order.id}">Order ID</td>
-                <td th:text="${order.userEmail}">user@example.com</td>
-                <td th:text="${order.username}">Username</td>
-                <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">Date</td>
-                <td th:text="${order.items.size() + ' items'}">Items</td>
-                <td th:text="${'$' + order.total}">Total</td>
-                <td>
-                            <span class="status-badge"
-                                  th:classappend="${'status-' + order.status}"
-                                  th:text="${order.status}">Status</span>
-                </td>
-                <td>
-                    <a th:href="@{/admin/orders/{id}(id=${order.id})}" class="btn">View Details</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+    <!-- Orders Table -->
+    <table th:unless="${orders.isEmpty()}" class="category-table">
+        <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Customer Email</th>
+            <th>Customer Name</th>
+            <th>Date</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td th:text="'#' + ${order.id}">#123</td>
+
+            <td th:text="${order.userEmail}">user@example.com</td>
+
+            <td th:text="${order.username}">Username</td>
+
+            <td>
+                <span class="order-date"
+                      th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">
+                    Date
+                </span>
+            </td>
+
+            <td>
+                <span class="order-items" th:text="${order.items.size()} + ' items'">
+                    0 items
+                </span>
+            </td>
+
+            <td>
+                <span class="order-total" th:text="'$' + ${order.total}">
+                    $0.00
+                </span>
+            </td>
+
+            <td>
+                <span class="status-badge"
+                      th:classappend="${'status-' + order.status}"
+                      th:text="${order.status}">
+                    Status
+                </span>
+            </td>
+
+            <td>
+                <div class="table-actions">
+                    <a th:href="@{/admin/orders/{id}(id=${order.id})}"
+                       class="admin-btn view">
+                        View Details
+                    </a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
 </div>
+
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        const notifications = document.querySelectorAll('.notification');
+        notifications.forEach(notification => {
+            // Показываем
+            setTimeout(() => notification.classList.add('show'), 10);
+
+            // Скрываем через 3 секунды
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        });
+    });
+</script>
+
 </body>
 </html>

@@ -1,0 +1,83 @@
+.status-badge {
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-NEW {
+    background: #3498db;
+    color: white;
+}
+
+.status-PROCESSING {
+    background: #f39c12;
+    color: white;
+}
+
+.status-SHIPPED {
+    background: #9b59b6;
+    color: white;
+}
+
+.status-DELIVERED {
+    background: #27ae60;
+    color: white;
+}
+
+.status-CANCELLED {
+    background: #e74c3c;
+    color: white;
+}
+
+.admin-btn.view {
+    background: #E3D0D8;
+    color: #290E07;
+}
+
+.admin-btn.view:hover {
+    background: #F6F5AE;
+}
+
+.no-orders {
+    text-align: center;
+    padding: 3rem 1rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(41, 14, 7, 0.1);
+}
+
+.no-orders h3 {
+    font-size: 1.2rem;
+    color: #290E07;
+    margin-bottom: 0.5rem;
+}
+
+.no-orders p {
+    color: #3F2A2B;
+    font-size: 0.95rem;
+}
+
+/* Make table cells more compact for orders */
+.category-table td {
+    padding: 10px 12px;
+}
+
+.order-total {
+    font-weight: 700;
+    color: #290E07;
+    font-size: 0.9rem;
+}
+
+.order-items {
+    color: #3F2A2B;
+    font-size: 0.85rem;
+}
+
+.order-date {
+    color: #3F2A2B;
+    font-size: 0.8rem;
+}

@@ -3,251 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <title>Order Details - Admin</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #f5f5f5; }
 
-        .navbar {
-            background: #e74c3c;
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .navbar a { color: white; text-decoration: none; margin-left: 1rem; }
+    <!-- GLOBAL -->
+    <link rel="stylesheet" th:href="@{/admin/navbar.css}">
 
-        .container {
-            max-width: 1100px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
+    <!-- PAGE-SPECIFIC -->
+    <link rel="stylesheet" th:href="@{/admin/categorylist.css}">
+    <link rel="stylesheet" th:href="@{/admin/orderdetails.css}">
 
-        .page-header {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
-        }
 
-        .page-header h1 {
-            color: #2c3e50;
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .order-info-grid {
-            display: grid;
-            grid-template-columns: 200px auto;
-            row-gap: 0.8rem;
-            column-gap: 1rem;
-            font-size: 1rem;
-        }
-
-        .label { font-weight: bold; color: #2c3e50; }
-
-        .status-badge {
-            padding: 0.4rem 0.8rem;
-            border-radius: 5px;
-            font-weight: bold;
-            display: inline-block;
-            font-size: 0.9rem;
-        }
-
-        .status-NEW { background: #3498db; color: white; }
-        .status-PROCESSING { background: #f39c12; color: white; }
-        .status-SHIPPED { background: #9b59b6; color: white; }
-        .status-DELIVERED { background: #27ae60; color: white; }
-        .status-CANCELLED { background: #e74c3c; color: white; }
-
-        .status-update {
-            background: white;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .status-update select {
-            padding: 0.5rem;
-            border-radius: 5px;
-            width: 200px;
-        }
-
-        .status-update button {
-            padding: 0.5rem 1rem;
-            background: #3498db;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            margin-left: 0.5rem;
-            cursor: pointer;
-        }
-
-        .order-items {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .item-card {
-            display: flex;
-            justify-content: space-between;
-            padding: 1rem;
-            border-bottom: 1px solid #eee;
-        }
-
-        .item-card:last-child {
-            border-bottom: none;
-        }
-
-        .item-name {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        .item-details {
-            color: #555;
-            margin-top: 0.3rem;
-        }
-
-        .item-price {
-            font-weight: bold;
-            color: #e74c3c;
-            font-size: 1.1rem;
-        }
-
-        .order-total {
-            text-align: right;
-            margin-top: 1.5rem;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .back-btn {
-            display: inline-block;
-            margin-top: 1rem;
-            padding: 0.7rem 1.2rem;
-            background: #34495e;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-
-        .back-btn:hover {
-            background: #2c3e50;
-        }
-    </style>
 </head>
 
 <body>
-<div class="navbar">
-    <h1>🔧 Admin - Order Details</h1>
-    <div>
-        <a th:href="@{/admin/dashboard}">Dashboard</a>
-        <a th:href="@{/orders/}">Orders</a>
-        <a th:href="@{/}">Home</a>
+<!-- Notifications -->
+<div th:if="${success}" class="notification notification-success" th:text="${success}"></div>
+<div th:if="${error}" class="notification notification-error" th:text="${error}"></div>
+
+<header class="site-header">
+    <div class="brand-container">
+        <div class="brand">
+            <span class="brand-icon">☕</span>
+            <span class="brand-name">Mocha Dreams - Admin Dashboard</span>
+            <span class="brand-tagline">Premium Coffee Experience</span>
+        </div>
     </div>
-</div>
+</header>
+
+<nav class="main-nav">
+    <div class="nav-container">
+        <div class="nav-links-left">
+            <a th:href="@{/admin/dashboard}" class="nav-link">Dashboard</a>
+            <a th:href="@{/admin/categories/}" class="nav-link">Categories</a>
+            <a th:href="@{/admin/products/}" class="nav-link">Products</a>
+            <a th:href="@{/orders/}" class="nav-link active">Orders</a>
+            <a th:href="@{/admin/users/}" class="nav-link">Users</a>
+        </div>
+
+        <div class="nav-links-right">
+            <form th:action="@{/auth/logout}" method="post">
+                <button class="logout-btn">Logout</button>
+            </form>
+        </div>
+    </div>
+</nav>
 
 <div class="container">
 
-    <!-- HEADER -->
-    <div class="page-header">
-        <h1 th:text="${'Order #' + order.id}">Order #1</h1>
+    <div class="details-container">
 
-        <div class="order-info-grid">
-            <div class="label">Order Date:</div>
-            <div th:text="${#temporals.format(order.orderDate, 'dd MMM yyyy HH:mm')}"></div>
+        <!-- Order Header -->
+        <div class="order-header-card">
+            <h1 th:text="'Order #' + ${order.id}">Order #1</h1>
 
-            <div class="label">Customer Name:</div>
-            <div th:text="${order.username}"></div>
+            <div class="order-info-grid">
+                <div class="info-label">Order Date:</div>
+                <div class="info-value" th:text="${#temporals.format(order.orderDate, 'dd MMM yyyy HH:mm')}">01 Jan 2025 12:00</div>
 
-            <div class="label">Email:</div>
-            <div th:text="${order.userEmail}"></div>
+                <div class="info-label">Customer Name:</div>
+                <div class="info-value" th:text="${order.username}">Customer Name</div>
 
-            <div class="label">User ID:</div>
-            <div th:text="${order.userId}"></div>
+                <div class="info-label">Email:</div>
+                <div class="info-value" th:text="${order.userEmail}">email@example.com</div>
 
-            <div class="label">Status:</div>
-            <div>
-                <span class="status-badge"
-                      th:classappend="${'status-' + order.status}"
-                      th:text="${order.status}"></span>
+                <div class="info-label">User ID:</div>
+                <div class="info-value" th:text="${order.userId}">123</div>
+
+                <div class="info-label">Status:</div>
+                <div>
+                    <span class="status-badge"
+                          th:classappend="${'status-' + order.status}"
+                          th:text="${order.status}">NEW</span>
+                </div>
+
+                <div class="info-label">Total Amount:</div>
+                <div class="total-amount" th:text="'$' + ${order.total}">$0.00</div>
+            </div>
+        </div>
+
+        <!-- Status Update -->
+        <div class="status-update-card">
+            <h3>Update Order Status</h3>
+
+            <div class="status-form">
+                <select id="status-select" class="status-select" required>
+                    <option value="">-- Select New Status --</option>
+                    <option value="NEW" th:selected="${order.status.name() == 'NEW'}">NEW</option>
+                    <option value="PROCESSING" th:selected="${order.status.name() == 'PROCESSING'}">PROCESSING</option>
+                    <option value="SHIPPED" th:selected="${order.status.name() == 'SHIPPED'}">SHIPPED</option>
+                    <option value="DELIVERED" th:selected="${order.status.name() == 'DELIVERED'}">DELIVERED</option>
+                    <option value="CANCELLED" th:selected="${order.status.name() == 'CANCELLED'}">CANCELLED</option>
+                </select>
+
+                <button class="btn-update-status" onclick="updateStatus()">Update Status</button>
+            </div>
+        </div>
+
+        <!-- Order Items -->
+        <div class="order-items-card">
+            <h3>Order Items</h3>
+
+            <div class="item-row" th:each="item : ${order.items}">
+                <img th:src="${item.productImageUrl}"
+                     class="item-image"
+                     alt="Product Image">
+
+                <div class="item-info">
+                    <div class="item-name" th:text="${item.productName}">Product Name</div>
+                    <div class="item-details">
+                        Quantity: <strong th:text="${item.quantity}">1</strong> ×
+                        $<span th:text="${item.unitPrice}">0.00</span>
+                    </div>
+                </div>
+
+                <div class="item-price" th:text="'$' + ${item.unitPrice * item.quantity}">$0.00</div>
             </div>
 
-            <div class="label">Total Amount:</div>
-            <div style="color:#e74c3c; font-size:1.3rem; font-weight:bold;"
-                 th:text="${'$' + order.total}"></div>
+            <div class="order-total-section">
+                <span class="total-label">TOTAL:</span>
+                <span class="total-value" th:text="'$' + ${order.total}">$0.00</span>
+            </div>
         </div>
+
     </div>
 
-    <!-- UPDATE STATUS BOX -->
-    <div class="status-update">
-        <h2>🔄 Update Order Status</h2>
+    <a class="btn-back" onclick="history.back();">Back to Orders</a>
 
-        <select id="status-select" required>
-            <option value="">-- Select New Status --</option>
-            <option value="NEW" th:selected="${order.status.name() == 'NEW'}">NEW</option>
-            <option value="PROCESSING" th:selected="${order.status.name() == 'PROCESSING'}">PROCESSING</option>
-            <option value="SHIPPED" th:selected="${order.status.name() == 'SHIPPED'}">SHIPPED</option>
-            <option value="DELIVERED" th:selected="${order.status.name() == 'DELIVERED'}">DELIVERED</option>
-            <option value="CANCELLED" th:selected="${order.status.name() == 'CANCELLED'}">CANCELLED</option>
-        </select>
+</div>
 
-        <button onclick="updateStatus()">Update Status</button>
-    </div>
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        const notifications = document.querySelectorAll('.notification');
+        notifications.forEach(notification => {
+            setTimeout(() => notification.classList.add('show'), 10);
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        });
+    });
 
-    <script>
-        function updateStatus() {
-            const status = document.getElementById('status-select').value;
+    function updateStatus() {
+        const status = document.getElementById('status-select').value;
 
-            fetch('/admin/orders/' + [[${order.id}]] + '/update-status', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'status=' + status
-            })
-                .then(r => r.text())
-                .then(() => {
+        if (!status) {
+            showNotification('Please select a status', 'error');
+            return;
+        }
+
+        fetch('/admin/orders/' + [[${order.id}]] + '/update-status', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'status=' + status
+        })
+            .then(r => {
+                if (r.ok) {
                     // Обновляем UI без перезагрузки
                     const badge = document.querySelector('.status-badge');
                     badge.textContent = status;
                     badge.className = 'status-badge status-' + status;
-                    alert("Статус обновлён!");
-                });
-        }
-    </script>
+                    showNotification('Status updated successfully!', 'success');
+                } else {
+                    showNotification('Error updating status', 'error');
+                }
+            })
+            .catch(() => {
+                showNotification('Error updating status', 'error');
+            });
+    }
 
+    function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
 
-    <!-- ORDER ITEMS -->
-    <div class="order-items">
-        <h2 style="margin-bottom:1rem;">Order Items</h2>
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 10);
 
-        <div class="item-card" th:each="item : ${order.items}">
-            <div>
-                <img th:src="@{${item.productImageUrl}}" alt="Product Image">
-                <div class="item-name" th:text="${item.productName}">Product</div>
-                <div class="item-details">
-                    Qty: <span th:text="${item.quantity}"></span> ×
-                    $<span th:text="${item.unitPrice}"></span>
-                </div>
-            </div>
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }, 3000);
+    }
+</script>
 
-            <div class="item-price"
-                 th:text="${'$' + (item.unitPrice * item.quantity)}">$0.00</div>
-        </div>
-
-        <div class="order-total">
-            TOTAL: <span th:text="${'$' + order.total}">$0.00</span>
-        </div>
-    </div>
-
-    <a class="back-btn" onclick="history.back();" >← Back to Orders</a>
-
-</div>
 </body>
 </html>
