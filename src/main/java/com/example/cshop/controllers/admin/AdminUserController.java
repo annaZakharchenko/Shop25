@@ -34,7 +34,7 @@ public class AdminUserController {
     @PostMapping("/delete/{id}")
     public String deleteUser(@PathVariable Long id) {
         userRepository.deleteById(id);
-        return "redirect:/admin/users";
+        return "redirect:/admin/users/";
     }
 
     // Просмотр информации о пользователе

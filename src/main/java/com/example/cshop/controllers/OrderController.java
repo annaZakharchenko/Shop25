@@ -3,6 +3,7 @@ package com.example.cshop.controllers;
 import com.example.cshop.dtos.order.OrderCreateDto;
 import com.example.cshop.dtos.order.OrderDto;
 import com.example.cshop.dtos.order.OrderUpdateDto;
+import com.example.cshop.models.Order;
 import com.example.cshop.services.interfaces.OrderService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -12,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -26,7 +29,12 @@ public class OrderController {
 
     @GetMapping("/")
     public String listOrders(Model model) {
-        model.addAttribute("orders", orderService.findAll());
+        List<OrderDto> orders = orderService.findAll();
+
+// сортировка по дате — новые сверху
+        orders.sort(Comparator.comparing(OrderDto::getOrderDate).reversed());
+
+        model.addAttribute("orders", orders);
         return "admin/orders/orders-list";
     }
 
