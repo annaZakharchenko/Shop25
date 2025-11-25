@@ -34,7 +34,6 @@ public class AdminController {
         this.userService = userService;
     }
 
-    // Dashboard
     @GetMapping("/dashboard")
     public String adminDashboard(Model model, Authentication auth) {
         model.addAttribute("username", auth.getName());

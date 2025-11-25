@@ -28,7 +28,6 @@ public class UserController {
 
     }
 
-
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("user", new UserCreateDto());
@@ -68,10 +67,6 @@ public class UserController {
         return "user/my-profile";
     }
 
-
-
-
-
     @PostMapping("/create")
     public String createUser(@ModelAttribute("user") @Valid UserCreateDto dto,
                              BindingResult bindingResult) {
@@ -100,19 +95,18 @@ public class UserController {
                                 Model model) {
 
         if (bindingResult.hasErrors()) {
-            // снова загрузить заказы + юзера
+
             String email = auth.getName();
             UserDto user = userService.findByEmail(email);
             List<OrderDto> orders = orderService.getOrdersForUserByEmail(email);
 
             model.addAttribute("user", user);
             model.addAttribute("orders", orders);
-            model.addAttribute("editMode", true); // показать форму
+            model.addAttribute("editMode", true);
 
             return "user/my-profile";
         }
 
-        // обновляем данные
         UserDto current = userService.findByEmail(auth.getName());
         userService.update(current.getId(), dto);
 

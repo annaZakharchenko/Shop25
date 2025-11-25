@@ -43,13 +43,11 @@ public class AuthServiceImpl implements AuthService {
 
         Set<Role> roles = new HashSet<>();
 
-        // Если email заканчивается на @cshop.com - это админ
         if (dto.getEmail().toLowerCase().endsWith("@cshop.com")) {
             roles.add(Role.ROLE_ADMIN);
             roles.add(Role.ROLE_USER);
-            System.out.println("✅ Admin role assigned to: " + dto.getEmail());
+            System.out.println("Admin role assigned to: " + dto.getEmail());
         } else {
-            // Обычный пользователь
             roles.add(Role.ROLE_USER);
         }
 
@@ -74,6 +72,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void logout() {
-        SecurityContextHolder.clearContext(); // очищает аутентификацию и сессию
+        SecurityContextHolder.clearContext();
     }
 }

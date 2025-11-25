@@ -70,13 +70,13 @@ public class AuthController {
             return "auth/login";
         }
 
-        return "redirect:/"; // главная страница после успешного входа
+        return "redirect:/";
     }
 
     // =================== Logout ===================
     @PostMapping("/logout")
     public String logoutUser() {
-        authService.logout(); // очищаем сессию
+        authService.logout();
         return "redirect:/auth/login.html?logout";
     }
 }

@@ -17,27 +17,27 @@ body {
     box-shadow: 0 6px 18px rgba(41,14,7,0.08);
     width: 100%;
     max-width: 400px;
-    text-align: left; /* теперь текст слева */
+    text-align: left;
 }
 
 .login-card h2 {
     font-size: 1.5rem;
     color: #290E07;
     margin-bottom: 0.5rem;
-    text-align: center; /* заголовок по центру */
+    text-align: center;
 }
 
 .login-card p {
     color: #3F2A2B;
     font-size: 0.9rem;
     margin-bottom: 1.5rem;
-    text-align: center; /* описание по центру */
+    text-align: center;
 }
 
 /* === INFO BOX VERTICAL LEFT-ALIGNED === */
 .info-box {
-    background: #e3d0d8; /* светлый фон */
-    border-left: 4px solid #290E07; /* цвет полоски слева */
+    background: #e3d0d8;
+    border-left: 4px solid #290E07;
     padding: 0.8rem 1rem;
     margin-bottom: 1.5rem;
     border-radius: 5px;
@@ -45,7 +45,7 @@ body {
 
 .info-box strong {
     color: #290E07;
-    display: block; /* чтобы заголовок был на отдельной строке */
+    display: block;
     margin-bottom: 0.3rem;
     font-size: 0.95rem;
 }

@@ -12,7 +12,7 @@ public class OrderDto {
     private Long id;
     private LocalDateTime orderDate;
     private Long userId;
-    private String userEmail;      // ← НОВОЕ ПОЛЕ
+    private String userEmail;
     private String username;
     private OrderStatus status;
     private BigDecimal total;

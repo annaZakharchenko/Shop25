@@ -28,14 +28,14 @@ public class UserOrderController {
 
     @GetMapping("/myorders")
     public String myOrders(Model model, Authentication authentication) {
-        String username = authentication.getName(); // получаем имя пользователя из Spring Security
+        String username = authentication.getName();
         List<OrderDto> orders = orderRepository.findByUserUsername(username)
                 .stream()
                 .map(orderMapper::toDto)
                 .toList();
 
         model.addAttribute("orders", orders);
-        return "user/my-orders"; // путь к Thymeleaf шаблону
+        return "user/my-orders";
     }
 
 }

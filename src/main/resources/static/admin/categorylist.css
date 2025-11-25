@@ -49,9 +49,9 @@
 
 /* === FIX: Images smaller & same height === */
 .product-img {
-    width: 70px;          /* уменьшает ширину */
-    height: 70px;         /* одинаковая высота */
-    object-fit: cover;    /* безопасно обрезает */
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
     border-radius: 6px;
     border: 2px solid #E3D0D8;
     background: #F6F5AE;
@@ -74,7 +74,7 @@
 .table-actions {
     display: flex;
     align-items: center;
-    gap: 0.6rem; /* расстояние между кнопками */
+    gap: 0.6rem;
 }
 
 /* Reset for delete <button> to remove browser borders */
@@ -107,10 +107,10 @@
     justify-content: center;
 
     padding: 0.5rem 1rem;
-    min-height: 36px;         /* одинаковая высота */
-    line-height: 1;           /* фиксирует текст по центру */
+    min-height: 36px;
+    line-height: 1;
 
-    border: none;             /* ВАЖНО — убираем уродскую обводку */
+    border: none;
     border-radius: 8px;
 
     font-size: 0.8rem;
@@ -135,10 +135,10 @@
     font-size: 0.8rem;
     font-weight: 500;
 
-    color: #3F2A2B; /* тёмный текст */
+    color: #3F2A2B;
     background: transparent;
 
-    border: 2px solid #3F2A2B; /* тёмная обводка */
+    border: 2px solid #3F2A2B;
     border-radius: 6px;
 
     cursor: pointer;
@@ -169,7 +169,7 @@
 .admin-btn.delete {
     background: #8B3A3A;
     color: #F6F5AE;
-    box-shadow: 0 0 0 transparent; /* никаких теней */
+    box-shadow: 0 0 0 transparent;
 }
 
 .admin-btn.delete:hover {

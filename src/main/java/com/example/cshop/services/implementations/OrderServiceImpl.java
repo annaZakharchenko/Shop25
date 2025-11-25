@@ -50,7 +50,6 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
 
-        // Преобразуем Order в OrderDto
         OrderDto orderDto = new OrderDto();
         orderDto.setId(order.getId());
         orderDto.setOrderDate(order.getOrderDate());
@@ -64,8 +63,8 @@ public class OrderServiceImpl implements OrderService {
             OrderItemDto dto = new OrderItemDto();
             dto.setId(item.getId());
             dto.setProductId(item.getProduct().getId());
-            dto.setProductName(item.getProduct().getName());        // название продукта
-            dto.setProductImageUrl(item.getProduct().getImageUrl());// ссылка на картинку
+            dto.setProductName(item.getProduct().getName());
+            dto.setProductImageUrl(item.getProduct().getImageUrl());
             dto.setQuantity(item.getQuantity());
             dto.setUnitPrice(item.getUnitPrice());
             dto.getSubtotal();
@@ -115,7 +114,7 @@ public class OrderServiceImpl implements OrderService {
 
         BigDecimal total = BigDecimal.ZERO;
 
-        // объединяем одинаковые продукты
+
         Map<Long, Integer> combinedCart = cart.entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
@@ -130,12 +129,12 @@ public class OrderServiceImpl implements OrderService {
             Product product = productRepository.findById(productId)
                     .orElseThrow(() -> new RuntimeException("Product not found: " + productId));
 
-            // Проверяем наличие на складе
+
             if (product.getStock() < quantity) {
-                throw new RuntimeException("Недостаточно товаров на складе: " + product.getName());
+                throw new RuntimeException("Not enough items in stock: " + product.getName());
             }
 
-            // уменьшаем stock
+
             product.setStock(product.getStock() - quantity);
             productRepository.save(product);
 

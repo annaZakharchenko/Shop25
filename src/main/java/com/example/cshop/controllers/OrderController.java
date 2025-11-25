@@ -31,7 +31,6 @@ public class OrderController {
     public String listOrders(Model model) {
         List<OrderDto> orders = orderService.findAll();
 
-// сортировка по дате — новые сверху
         orders.sort(Comparator.comparing(OrderDto::getOrderDate).reversed());
 
         model.addAttribute("orders", orders);
@@ -65,19 +64,16 @@ public class OrderController {
             return "redirect:/cart?empty"; // корзина пуста
         }
 
-        // Создание заказа
         orderService.createOrderFromCart(email, cart);
 
-        // Очистка корзины
         session.removeAttribute("cart");
 
-        return "redirect:/users/profile/"; // редирект на страницу заказов пользователя
+        return "redirect:/users/profile/";
     }
     @GetMapping("/{id}")
     public String getOrderDetails(@PathVariable Long id, Model model, Authentication authentication) {
         OrderDto order = orderService.findById(id);
 
-        // Проверка: пользователь не должен увидеть чужой заказ
         String email = authentication.getName();
         if (!order.getUserEmail().equals(email)) {
             return "redirect:/users/profile/?error=forbidden";
@@ -86,9 +82,6 @@ public class OrderController {
         model.addAttribute("order", order);
         return "user/myorder";
     }
-
-
-
 
 
     @GetMapping("/edit/{id}")

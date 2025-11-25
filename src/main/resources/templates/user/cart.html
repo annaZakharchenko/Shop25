@@ -68,7 +68,6 @@
         </div>
 
         <!-- Cart Items -->
-        <!-- Контейнер для всех товаров -->
         <div class="cart-items-container">
             <div th:each="item : ${items}" class="cart-item">
                 <div class="info">
@@ -122,12 +121,11 @@
 <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function() {
 
-        // Отслеживаем формы удаления товаров
         const removeForms = document.querySelectorAll('.cart-item .remove form');
 
         removeForms.forEach(form => {
             form.addEventListener('submit', function(e) {
-                e.preventDefault(); // предотвратить стандартную отправку формы
+                e.preventDefault();
 
                 const url = form.getAttribute('action');
 
@@ -141,16 +139,13 @@
                     .then(res => res.json())
                     .then(data => {
                         if(data.success) {
-                            // Удаляем карточку товара
                             form.closest('.cart-item').remove();
 
-                            // Обновляем total
                             const totalEl = document.querySelector('.total span');
                             if(totalEl) totalEl.textContent = data.newTotal;
 
                             showNotification('Item removed from cart', 'success');
 
-                            // Если корзина пустая, показываем сообщение
                             if(data.itemCount === 0) {
                                 const emptyCart = document.createElement('div');
                                 emptyCart.className = 'empty-cart';

@@ -36,7 +36,6 @@ public class OrderItem {
         this.unitPrice = unitPrice;
     }
 
-    // Getters / setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

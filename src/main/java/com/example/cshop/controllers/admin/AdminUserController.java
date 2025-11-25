@@ -29,15 +29,12 @@ public class AdminUserController {
         return "admin/users";
     }
 
-
-    // Удаление пользователя
     @PostMapping("/delete/{id}")
     public String deleteUser(@PathVariable Long id) {
         userRepository.deleteById(id);
         return "redirect:/admin/users/";
     }
 
-    // Просмотр информации о пользователе
     @GetMapping("/details/{id}")
     public String userDetails(@PathVariable Long id, Model model) {
 
@@ -46,7 +43,6 @@ public class AdminUserController {
 
         model.addAttribute("user", user);
 
-        // 👉 Добавляем заказы
         model.addAttribute("orders", user.getOrders());
 
         return "admin/user-details";

@@ -1,6 +1,6 @@
 /* ========== ADMIN DASHBOARD STYLES ========== */
 
-/* СЕТКА DASHBOARD */
+/* DASHBOARD */
 .dashboard-container {
     display: flex;
     gap: 2rem;
@@ -8,7 +8,6 @@
     flex-wrap: wrap;
 }
 
-/* Заголовки секций */
 .section-title {
     font-size: 1rem;
     font-weight: 600;
@@ -17,7 +16,7 @@
     text-transform: uppercase;
 }
 
-/* Быстрые действия */
+
 .quick-actions {
     flex: 1;
 }
@@ -28,7 +27,7 @@
     gap: 0.6rem;
 }
 
-/* Компактные кнопки */
+
 .action-btn {
     display: flex;
     align-items: center;
@@ -54,7 +53,6 @@
 
 .action-icon { font-size: 1rem; }
 
-/* Статистика */
 .stats {
     flex: 2;
 }
@@ -65,7 +63,6 @@
     gap: 0.8rem;
 }
 
-/* Карточки статистики — компактные кубики */
 .stat-card {
     background: white;
     padding: 0.8rem 1rem;
@@ -77,7 +74,6 @@
 .stat-card .number { font-size: 1.2rem; font-weight: bold; color: #290E07; margin-bottom: 0.1rem; }
 .stat-card .label { font-size: 0.8rem; color: #3F2A2B; }
 
-/* Адаптив */
 @media (max-width: 992px) {
     .dashboard-container { flex-direction: column; }
     .stats-grid { grid-template-columns: 1fr 1fr; }

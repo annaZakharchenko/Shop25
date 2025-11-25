@@ -31,7 +31,6 @@ public class Order {
     public Order() {
     }
 
-    // Getters / setters
     public Long getId() {
         return id;
     }

@@ -117,7 +117,7 @@
                     <!-- Guest Message -->
                     <div sec:authorize="!isAuthenticated()" class="guest-message">
                         <p>Please <a th:href="@{/auth/login}">login</a> or <a th:href="@{/auth/register}">create an account</a> to purchase this product.</p>
-                        <a class="btn btn-back" onclick="history.back();">← Back to Products</a>
+                        <a class="btn btn-back" onclick="history.back();">Back to Products</a>
                     </div>
                 </div>
             </div>
@@ -134,7 +134,7 @@
     </div>
 </footer>
 
-<!-- JavaScript -->
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 

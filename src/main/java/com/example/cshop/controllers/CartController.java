@@ -55,7 +55,7 @@ public class CartController {
         for (int q : cart.values()) count += q;
         model.addAttribute("cartItemCount", count);
 
-        return "user/cart"; // путь к твоему Thymeleaf шаблону
+        return "user/cart";
     }
 
     @PostMapping("/add-ajax/{productId}")
@@ -103,7 +103,6 @@ public class CartController {
             session.setAttribute("cart", cart);
         }
 
-        // считаем общее кол-во и сумму
         BigDecimal total = BigDecimal.ZERO;
         int itemCount = 0;
         if(cart != null) {

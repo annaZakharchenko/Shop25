@@ -106,10 +106,10 @@
     document.addEventListener('DOMContentLoaded', function() {
         const notifications = document.querySelectorAll('.notification');
         notifications.forEach(notification => {
-            // Показываем
+
             setTimeout(() => notification.classList.add('show'), 10);
 
-            // Скрываем через 3 секунды
+
             setTimeout(() => {
                 notification.classList.remove('show');
                 setTimeout(() => notification.remove(), 300);

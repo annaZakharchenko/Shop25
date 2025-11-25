@@ -80,5 +80,5 @@
 .btn-secondary { background: #3F2A2B; color: #F6F5AE; }
 .btn-secondary:hover { background: #290E07; }
 
-/* Адаптив */
+
 @media (max-width: 992px) { .dashboard-container { flex-direction: column; } }

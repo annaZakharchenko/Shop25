@@ -27,7 +27,6 @@ body {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* Admin navbar - красный цвет */
 .navbar.admin {
     background: #e74c3c;
 }
@@ -358,7 +357,7 @@ tbody td:last-child {
 .products-table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 10px; /* расстояние между строками */
+    border-spacing: 0 10px;
     background: transparent;
     font-family: "Poppins", sans-serif;
 }

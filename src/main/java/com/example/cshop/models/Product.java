@@ -50,7 +50,6 @@ public class Product {
         this.stock = stock != null ? stock : 0;
     }
 
-    // Getters / setters
     public Long getId() {
         return id;
     }

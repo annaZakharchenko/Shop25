@@ -64,7 +64,7 @@
 
 .product-detail-image img {
     width: 100%;
-    height: auto; /* чтобы сохранять пропорции */
+    height: auto;
     display: block;
     transition: transform 0.3s;
 }
@@ -196,7 +196,6 @@
     outline: none;
 }
 
-/* Remove spinner arrows */
 .quantity-controls input::-webkit-outer-spin-button,
 .quantity-controls input::-webkit-inner-spin-button {
     -webkit-appearance: none;

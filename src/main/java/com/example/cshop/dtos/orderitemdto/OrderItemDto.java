@@ -35,7 +35,6 @@ public class OrderItemDto {
     public BigDecimal getSubtotal() {
         return unitPrice.multiply(BigDecimal.valueOf(quantity));
     }
-    public void setSubtotal(BigDecimal subtotal) {}
 
 
 }

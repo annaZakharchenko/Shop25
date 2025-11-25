@@ -1,12 +1,9 @@
-/* profile.css — стили только для страницы профиля.
-   Остальное берётся из main.css */
 
-/* Layout */
+
 .profile-main {
     padding: 2.5rem 0;
 }
 
-/* Grid: левый профиль (узкий) — правый orders (шире) */
 .profile-grid {
     display: grid;
     grid-template-columns: 320px 1fr;
@@ -23,7 +20,7 @@
     padding: 1.2rem;
     box-shadow: 0 6px 18px rgba(41,14,7,0.08);
 
-    display: inline-block; /* подстраивается под содержимое */
+    display: inline-block;
     width: 100%;
     height: fit-content;
     line-height: 1.4;
@@ -66,7 +63,6 @@
     margin-bottom: 0.8rem;
 }
 
-/* Table wrapper to allow horizontal scroll on small screens */
 .orders-table-wrap {
     overflow-x: auto;
 }
@@ -81,7 +77,7 @@
 .orders-table thead th {
     text-align: left;
     padding: 0.7rem 0.8rem;
-    background: #F6F5AE; /* мягкий заголовок */
+    background: #F6F5AE;
     color: #290E07;
     font-weight: 700;
     border-bottom: 1px solid #E3D0D8;
@@ -94,7 +90,6 @@
     vertical-align: middle;
 }
 
-/* Статусы */
 .status {
     font-weight: 700;
 }
@@ -162,9 +157,9 @@
     overflow: hidden;
     background: linear-gradient(135deg, #E3D0D8 0%, #F6F5AE 100%);
     box-shadow: 0 4px 15px rgba(41, 14, 7, 0.15);
-    max-width: 150px; /* уменьшили ещё */
+    max-width: 150px;
     width: 100%;
-    flex-shrink: 0; /* чтобы не сжималась */
+    flex-shrink: 0;
 }
 
 .product-detail-image img {
@@ -180,7 +175,7 @@
 
 /* === ITEM INFO === */
 .item-info {
-    flex: 1; /* занимает оставшееся место справа */
+    flex: 1;
 }
 
 

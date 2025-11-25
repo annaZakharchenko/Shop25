@@ -19,7 +19,6 @@ public class ProductController {
         this.productService = productService;
     }
 
-    // Страница с деталями продукта
     @GetMapping("/products/detail/{id}")
     public String productDetail(@PathVariable Long id, Model model, HttpSession session) {
 

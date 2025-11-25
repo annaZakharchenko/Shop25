@@ -1,4 +1,4 @@
-/* CARD CONTAINER — уменьшенная версия */
+/* CARD CONTAINER */
 .info-card {
     background: #ffffff;
     padding: 1.3rem;
@@ -8,17 +8,17 @@
 
     border-left: 3px solid #8d5b4c;
 
-    max-width: 600px;   /* ширину можно менять */
-    margin-left: 0;     /* теперь ЛЕВАЯ */
+    max-width: 600px;
+    margin-left: 0;
 }
 
 
-/* ROW INSIDE THE CARD — компактнее */
+/* ROW INSIDE THE CARD */
 .info-row {
     display: flex;
     justify-content: space-between;
-    padding: 0.6rem 0;               /* было 0.8rem */
-    font-size: 1rem;                 /* было 1.1rem */
+    padding: 0.6rem 0;
+    font-size: 1rem;
     border-bottom: 1px solid #e8e8e8;
 }
 
@@ -30,7 +30,6 @@
     font-weight: 400;
 }
 
-/* Адаптивность — чуть меньше отступы */
 @media (max-width: 768px) {
     .info-card {
         padding: 1rem;

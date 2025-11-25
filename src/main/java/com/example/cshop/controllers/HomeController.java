@@ -31,7 +31,6 @@ public class HomeController {
                        Authentication authentication,
                        HttpSession session) {  // <-- добавляем HttpSession
 
-        // --- Продукты ---
         List<ProductDto> products;
         CategoryDto selectedCategory = null;
         if (categoryId != null) {
@@ -41,10 +40,8 @@ public class HomeController {
             products = productService.findAll();
         }
 
-        // --- Категории ---
         List<CategoryDto> categories = categoryService.findAll();
 
-        // --- Подсчет количества товаров в корзине ---
         @SuppressWarnings("unchecked")
         Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
         int cartItemCount = 0;
@@ -54,13 +51,11 @@ public class HomeController {
             }
         }
 
-        // --- Добавляем атрибуты для Thymeleaf ---
         model.addAttribute("products", products);
         model.addAttribute("categories", categories);
         model.addAttribute("category", selectedCategory);
-        model.addAttribute("cartItemCount", cartItemCount); // <-- новый атрибут
+        model.addAttribute("cartItemCount", cartItemCount);
 
-        // --- Проверка авторизации ---
         if (authentication != null && authentication.isAuthenticated()) {
             model.addAttribute("isAuthenticated", true);
             boolean isAdmin = authentication.getAuthorities().stream()
