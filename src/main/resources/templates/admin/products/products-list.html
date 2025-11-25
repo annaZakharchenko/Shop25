@@ -3,82 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <title>Products - Admin</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: "Poppins", Arial, sans-serif; background: #f5f5f5; color: #333; }
 
-        /* Navbar */
-        .navbar {
-            background: #e74c3c;
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .navbar a { color: white; text-decoration: none; margin: 0 1rem; }
-        .navbar a:hover { text-decoration: underline; }
+    <!-- GLOBAL -->
+    <link rel="stylesheet" th:href="@{/admin/navbar.css}">
 
-        /* Container */
-        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+    <!-- PAGE-SPECIFIC -->
+    <link rel="stylesheet" th:href="@{/admin/categorylist.css}">
 
-        /* Page Header */
-        .page-header { background: white; padding: 2rem; border-radius: 8px; margin-bottom: 2rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-
-        /* Products Table */
-        table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
-        thead { background: #34495e; color: white; border-radius: 8px; }
-        th, td { padding: 12px 15px; text-align: left; }
-        tbody tr { background: white; border-radius: 8px; transition: background 0.2s, transform 0.2s; }
-        tbody tr:hover { background: #f8f9fa; transform: translateY(-2px); }
-
-        /* Product Image */
-        .product-img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s; }
-        .product-img:hover { transform: scale(1.1); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
-
-        /* Buttons */
-        .button-group { display: flex; gap: 10px; }
-        .btn-edit, .btn-delete { padding: 6px 12px; font-size: 0.9rem; border-radius: 5px; border: none; cursor: pointer; color: white; transition: background 0.3s, transform 0.2s; }
-        .btn-edit { background: #3498db; }
-        .btn-edit:hover { background: #2980b9; transform: translateY(-1px); }
-        .btn-delete { background: #e74c3c; }
-        .btn-delete:hover { background: #c0392b; transform: translateY(-1px); }
-
-        /* Price & Stock */
-        .price { color: #e74c3c; font-weight: bold; }
-        .stock { font-weight: bold; }
-        .stock.low { color: #f39c12; }
-        .stock.out { color: #e74c3c; }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            th, td { padding: 8px 10px; }
-            .product-img { width: 50px; height: 50px; }
-            .button-group { flex-direction: column; gap: 6px; }
-        }
-    </style>
 </head>
+
 <body>
 
-<div class="navbar">
-    <h1>📦 Admin - Products</h1>
-    <div>
-        <a th:href="@{/admin/dashboard}">Dashboard</a>
-        <a th:href="@{/}">Home</a>
+<header class="site-header">
+    <div class="brand-container">
+        <div class="brand">
+            <span class="brand-icon">☕</span>
+            <span class="brand-name">Mocha Dreams - Admin Dashboard</span>
+            <span class="brand-tagline">Premium Coffee Experience</span>
+        </div>
     </div>
-</div>
+</header>
+
+<nav class="main-nav">
+    <div class="nav-container">
+        <div class="nav-links-left">
+            <a th:href="@{/admin/dashboard}" class="nav-link">Dashboard</a>
+            <a th:href="@{/admin/categories/}" class="nav-link">Categories</a>
+            <a th:href="@{/admin/products/}" class="nav-link active">Products</a>
+            <a th:href="@{/orders/}" class="nav-link">Orders</a>
+            <a th:href="@{/admin/users/}" class="nav-link">Users</a>
+        </div>
+
+        <div class="nav-links-right">
+            <form th:action="@{/auth/logout}" method="post">
+                <button class="logout-btn">Logout</button>
+            </form>
+        </div>
+    </div>
+</nav>
 
 <div class="container">
-    <div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
-        <h1>📦 All Products</h1>
-        <!-- Кнопка создания продукта -->
-        <a th:href="@{/admin/products/create}"
-           style="padding: 10px 18px; background: #27ae60; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background 0.3s;">
+
+    <div class="page-header">
+        <h1>All Products</h1>
+
+        <a th:href="@{/admin/products/create}" class="admin-btn add">
             ➕ Create Product
         </a>
     </div>
 
-    <table>
+
+    <table class="category-table">
         <thead>
         <tr>
             <th>ID</th>
@@ -94,24 +69,35 @@
         <tbody>
         <tr th:each="p : ${products}">
             <td th:text="${p.id}"></td>
-            <td><img th:src="${p.imageUrl}" alt="img" class="product-img"></td>
-            <td th:text="${p.name}"></td>
-            <td th:text="${p.category != null ? p.category.name : 'No Category'}"></td>
-            <td class="price" th:text="${p.price}"></td>
-            <td class="stock" th:text="${p.stock}"></td>
+
             <td>
-                <div class="button-group">
-                    <a th:href="@{'/admin/products/edit/' + ${p.id}}" class="btn-edit">✏ Edit</a>
+                <img th:src="${p.imageUrl}" class="product-img">
+            </td>
+
+            <td th:text="${p.name}"></td>
+
+            <td th:text="${p.category != null ? p.category.name : 'No Category'}"></td>
+
+            <td class="price" th:text="${p.price} + ' €'"></td>
+
+            <td class="stock"
+                th:text="${p.stock}">
+            </td>
+
+            <td>
+                <div class="table-actions">
+                    <a th:href="@{'/admin/products/edit/' + ${p.id}}" class="admin-btn edit">Edit</a>
+
                     <form th:action="@{'/admin/products/delete/' + ${p.id}}" method="post">
-                        <button type="submit" class="btn-delete">🗑 Delete</button>
+                        <button class="admin-btn delete">Delete</button>
                     </form>
                 </div>
             </td>
         </tr>
         </tbody>
     </table>
-</div>
 
+</div>
 
 </body>
 </html>

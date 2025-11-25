@@ -1,0 +1,180 @@
+/* ========== CATEGORY TABLE PAGE ONLY ========== */
+
+/* Page Card */
+.category-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(41, 14, 7, 0.12);
+    margin-bottom: 2rem;
+}
+
+/* Header with Add button */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.page-header h1 {
+    font-size: 1.2rem;
+    color: #290E07;
+}
+
+/* ===== PRODUCTS TABLE FIX ===== */
+
+.category-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(41,14,7,0.15);
+}
+
+.category-table th {
+    background-color: #3F2A2B;
+    color: #F6F5AE;
+    text-align: left;
+    padding: 12px;
+    font-size: 0.85rem;
+}
+
+.category-table td {
+    padding: 12px;
+    border-bottom: 1px solid #E3D0D8;
+    font-size: 0.85rem;
+}
+
+/* === FIX: Images smaller & same height === */
+.product-img {
+    width: 70px;          /* уменьшает ширину */
+    height: 70px;         /* одинаковая высота */
+    object-fit: cover;    /* безопасно обрезает */
+    border-radius: 6px;
+    border: 2px solid #E3D0D8;
+    background: #F6F5AE;
+}
+
+/* Center image inside cell */
+.category-table td img {
+    display: block;
+    margin: 0 auto;
+}
+
+/* Actions */
+.table-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+
+/* Container for Edit / Delete */
+.table-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem; /* расстояние между кнопками */
+}
+
+/* Reset for delete <button> to remove browser borders */
+.table-actions button {
+    border: none;
+    outline: none;
+    padding: 0;
+    background: none;
+}
+
+/* Make delete button look same size as Edit */
+.table-actions .admin-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    font-weight: 500;
+}
+
+
+/* Buttons for table */
+.admin-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0.5rem 1rem;
+    min-height: 36px;         /* одинаковая высота */
+    line-height: 1;           /* фиксирует текст по центру */
+
+    border: none;             /* ВАЖНО — убираем уродскую обводку */
+    border-radius: 8px;
+
+    font-size: 0.8rem;
+    font-weight: 500;
+
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.25s;
+}
+
+
+/* === ADD CATEGORY BUTTON === */
+
+/* ADD CATEGORY BUTTON — dark outlined -> dark filled on hover */
+.admin-btn.add {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+
+    padding: 0.45rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+
+    color: #3F2A2B; /* тёмный текст */
+    background: transparent;
+
+    border: 2px solid #3F2A2B; /* тёмная обводка */
+    border-radius: 6px;
+
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.25s ease;
+
+    box-shadow: 0 4px 12px rgba(41, 14, 7, 0.15);
+}
+
+.admin-btn.add:hover {
+    background: linear-gradient(135deg, #290E07 0%, #3F2A2B 100%);
+    color: #F6F5AE; /* светлый текст */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(41, 14, 7, 0.25);
+}
+
+
+/* Edit Button */
+.admin-btn.edit {
+    background: #E3D0D8;
+    color: #290E07;
+}
+.admin-btn.edit:hover {
+    background: #F6F5AE;
+}
+
+/* Delete Button */
+.admin-btn.delete {
+    background: #8B3A3A;
+    color: #F6F5AE;
+    box-shadow: 0 0 0 transparent; /* никаких теней */
+}
+
+.admin-btn.delete:hover {
+    background: #6E2C2C;
+}
+
+
+
