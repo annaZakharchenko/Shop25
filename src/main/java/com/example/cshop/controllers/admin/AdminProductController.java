@@ -12,6 +12,7 @@ import com.example.cshop.repositories.ProductRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin/products")
@@ -83,9 +84,17 @@ public class AdminProductController {
     }
 
     @PostMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable Long id) {
-        productService.delete(id);
+    public String deleteProduct(@PathVariable Long id, RedirectAttributes ra) {
+        try {
+            productService.delete(id);
+            ra.addFlashAttribute("success", "Product deleted successfully!");
+        } catch (RuntimeException ex) {
+            // Если это ошибка ограничения FK — показываем понятное уведомление
+            ra.addFlashAttribute("error", "Product cannot be deleted because it is used in orders.");
+        }
         return "redirect:/admin/products/";
     }
+
+
 
 }

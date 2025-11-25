@@ -13,6 +13,9 @@
 </head>
 
 <body>
+<!-- Notifications -->
+<div th:if="${success}" class="notification notification-success" th:text="${success}"></div>
+<div th:if="${error}" class="notification notification-error" th:text="${error}"></div>
 
 <header class="site-header">
     <div class="brand-container">
@@ -98,6 +101,22 @@
     </table>
 
 </div>
+
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        const notifications = document.querySelectorAll('.notification');
+        notifications.forEach(notification => {
+            // Показываем
+            setTimeout(() => notification.classList.add('show'), 10);
+
+            // Скрываем через 3 секунды
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        });
+    });
+</script>
 
 </body>
 </html>

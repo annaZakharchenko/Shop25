@@ -10,6 +10,7 @@ import com.example.cshop.repositories.CategoryRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin/categories")
@@ -62,14 +63,21 @@ public class AdminCategoryController {
             return "admin/categories/category-update";
         }
         categoryService.update(id, dto);
-        return "redirect:/admin/categories/read";
+        return "redirect:/admin/categories/";
     }
 
     @PostMapping("/delete/{id}")
-    public String deleteCategory(@PathVariable Long id) {
-        categoryService.delete(id);
+    public String deleteCategory(@PathVariable Long id, RedirectAttributes ra) {
+        try {
+            categoryService.delete(id);
+            ra.addFlashAttribute("success", "Category deleted successfully!");
+        } catch (RuntimeException ex) {
+            ra.addFlashAttribute("error", "Category cannot be deleted because it has products assigned.");
+        }
         return "redirect:/admin/categories/";
     }
+
+
 }
 
 

@@ -6,6 +6,8 @@ import com.example.cshop.dtos.product.ProductUpdateDto;
 import com.example.cshop.mappers.ProductMapper;
 import com.example.cshop.models.Category;
 import com.example.cshop.models.Product;
+import com.example.cshop.repositories.OrderItemRepository;
+import com.example.cshop.repositories.OrderRepository;
 import com.example.cshop.repositories.ProductRepository;
 import com.example.cshop.repositories.CategoryRepository; // <- добавляем
 import com.example.cshop.services.interfaces.ProductService;
@@ -22,13 +24,15 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository; // <- добавляем
     private final ProductMapper productMapper;
+    private final OrderItemRepository orderItemRepository;
 
     public ProductServiceImpl(ProductRepository productRepository,
                               CategoryRepository categoryRepository,
-                              ProductMapper productMapper) {
+                              ProductMapper productMapper, OrderItemRepository orderItemRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.productMapper = productMapper;
+        this.orderItemRepository = orderItemRepository;
     }
 
     @Override
@@ -82,6 +86,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void delete(Long id) {
+        if (orderItemRepository.existsByProductId(id)) {
+            throw new RuntimeException("Product cannot be deleted because it is used in orders.");
+        }
+
         productRepository.deleteById(id);
     }
+
 }

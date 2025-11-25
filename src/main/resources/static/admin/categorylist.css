@@ -176,5 +176,34 @@
     background: #6E2C2C;
 }
 
+/* === NOTIFICATIONS === */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: -400px;
+    background: white;
+    padding: 0.7rem 1.4rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    z-index: 10000;
+    transition: right 0.3s;
+    font-size: 0.85rem;
+    min-width: 300px;
+}
+
+.notification.show {
+    right: 20px;
+}
+
+.notification-success {
+    border-left: 4px solid #27ae60;
+    color: #27ae60;
+}
+
+.notification-error {
+    border-left: 4px solid #e74c3c;
+    color: #e74c3c;
+}
+
 
 
